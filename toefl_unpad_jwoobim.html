@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOEFL UNPAD – JWOOBIM</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --g0:#F0FAF3; --g1:#D8F3DC; --g2:#B7E4C7; --g3:#74C69D; --g4:#40916C;
+  --g5:#2D6A4F; --g6:#1B4332; --g7:#081C15;
+  --p0:#F3E5F5; --p1:#CE93D8; --p2:#9C27B0;
+  --warn:#FFF9C4; --warn-b:#F9A825;
+  --bg:#F5FCF7; --card:#fff; --border:#D8F3DC;
+  --text:#1B4332; --muted:#52796F; --light:#B7E4C7;
+  --r:14px; --rs:8px; --shadow:0 2px 12px rgba(27,67,50,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ── COVER ── */
+#cover{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;position:relative;overflow:hidden}
+#cover::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,#D8F3DC88 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,#B7E4C744 0%,transparent 50%);pointer-events:none}
+.cover-stickers{font-size:2rem;letter-spacing:6px;margin-bottom:1.5rem;opacity:.8}
+.cover-brand{font-family:'Fraunces',serif;font-size:clamp(2.4rem,6vw,3.8rem);font-weight:700;color:var(--g6);line-height:1.1;text-align:center;margin-bottom:.4rem}
+.cover-sub{font-size:clamp(1rem,2.5vw,1.3rem);color:var(--g5);text-align:center;margin-bottom:2rem;font-weight:500}
+.cover-meta{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;width:100%;max-width:460px;margin-bottom:2rem}
+.meta-pill{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:.75rem 1rem;text-align:center;font-size:.875rem;color:var(--g5);font-weight:600}
+.meta-pill span{display:block;font-size:1.25rem;font-weight:800;color:var(--g4)}
+.wm{font-size:.75rem;color:var(--g3);letter-spacing:.15em;font-weight:600;margin-top:.5rem}
+.btn-primary{background:var(--g4);color:#fff;border:none;border-radius:var(--rs);padding:.9rem 2.5rem;font-size:1.05rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;width:100%;max-width:320px}
+.btn-primary:hover{background:var(--g5);transform:translateY(-1px)}
+
+/* ── SECTION SELECT ── */
+#section-select{display:none;padding:2rem 1rem;max-width:700px;margin:0 auto}
+.sec-title{font-family:'Fraunces',serif;font-size:1.6rem;color:var(--g6);margin-bottom:.3rem;font-weight:700}
+.sec-desc{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
+.sections-grid{display:grid;gap:.75rem}
+.sec-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:1rem}
+.sec-card:hover{border-color:var(--g3);background:#F0FAF3;transform:translateY(-1px);box-shadow:var(--shadow)}
+.sec-card.done{border-color:var(--g3);background:#EAF7EE}
+.sec-icon{font-size:1.8rem;width:44px;text-align:center}
+.sec-info{flex:1}
+.sec-name{font-weight:700;color:var(--g6);font-size:1rem}
+.sec-detail{font-size:.825rem;color:var(--muted);margin-top:.2rem}
+.sec-badge{background:var(--g1);color:var(--g5);font-size:.75rem;font-weight:700;padding:.25rem .6rem;border-radius:20px;white-space:nowrap}
+.sec-badge.done{background:var(--g3);color:#fff}
+.btn-start-all{margin-top:1.25rem;width:100%}
+
+/* ── QUIZ ── */
+#quiz{display:none;max-width:700px;margin:0 auto;padding:1rem}
+.quiz-header{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:.875rem 1.25rem;margin-bottom:.875rem;display:flex;align-items:center;gap:1rem}
+.q-section-name{font-weight:700;color:var(--g5);font-size:.875rem;flex:1}
+.q-progress-text{font-size:.8rem;color:var(--muted)}
+.timer{background:var(--g1);color:var(--g5);font-weight:800;font-size:.9rem;padding:.3rem .75rem;border-radius:20px;min-width:60px;text-align:center}
+.timer.warn{background:#FFF3CD;color:#856404}
+.timer.danger{background:#FECACA;color:#DC2626}
+.progress-bar{height:5px;background:var(--g1);border-radius:3px;overflow:hidden;margin-bottom:1rem}
+.progress-fill{height:100%;background:var(--g4);border-radius:3px;transition:.3s}
+
+/* script/passage box */
+.script-box{background:#EAF7EE;border-left:4px solid var(--g3);border-radius:0 var(--rs) var(--rs) 0;padding:1rem 1.1rem;margin-bottom:.875rem;font-size:.875rem;line-height:1.7;color:var(--g6)}
+.script-label{font-size:.7rem;font-weight:700;color:var(--g4);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.passage-box{background:#F0FBF4;border:1.5px solid var(--border);border-radius:var(--r);padding:1rem 1.1rem;margin-bottom:.875rem;font-size:.875rem;line-height:1.75;color:var(--g6);font-style:italic;max-height:240px;overflow-y:auto}
+.passage-box p+p{margin-top:.75rem}
+
+/* question card */
+.q-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:1.25rem;box-shadow:var(--shadow)}
+.q-num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;background:var(--g4);color:#fff;border-radius:50%;font-weight:800;font-size:.85rem;margin-bottom:.75rem}
+.q-text{font-weight:700;font-size:.95rem;color:var(--g6);line-height:1.6;margin-bottom:1rem}
+.options{display:flex;flex-direction:column;gap:.5rem}
+.opt-btn{background:#F8FFF9;border:1.5px solid var(--border);border-radius:var(--rs);padding:.75rem 1rem;text-align:left;cursor:pointer;font-family:inherit;font-size:.875rem;color:var(--g6);transition:.15s;display:flex;align-items:center;gap:.75rem;line-height:1.5}
+.opt-btn:hover:not(:disabled){border-color:var(--g3);background:#EAF7EE}
+.opt-btn.selected{border-color:var(--g4);background:#D8F3DC;color:var(--g6)}
+.opt-btn.correct{border-color:#16a34a;background:#DCFCE7;color:#15803d;font-weight:700}
+.opt-btn.wrong{border-color:#DC2626;background:#FEE2E2;color:#DC2626}
+.opt-btn.correct-reveal{border-color:#16a34a;background:#DCFCE7;color:#15803d}
+.opt-badge{width:24px;height:24px;border-radius:50%;background:var(--g2);color:var(--g6);font-weight:800;font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.opt-btn.selected .opt-badge,.opt-btn.correct .opt-badge{background:var(--g4);color:#fff}
+.opt-btn.wrong .opt-badge{background:#DC2626;color:#fff}
+
+.explanation{margin-top:1rem;padding:.875rem 1rem;background:#EAF7EE;border-radius:var(--rs);font-size:.825rem;color:var(--g5);line-height:1.65;border-left:3px solid var(--g3)}
+.exp-label{font-weight:700;color:var(--g4);margin-bottom:.3rem;font-size:.8rem}
+
+.nav-row{display:flex;gap:.75rem;margin-top:.875rem}
+.btn-nav{flex:1;padding:.75rem;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--card);color:var(--g5);font-weight:700;font-size:.875rem;cursor:pointer;font-family:inherit;transition:.15s}
+.btn-nav:hover{border-color:var(--g3);background:#EAF7EE}
+.btn-nav.primary{background:var(--g4);color:#fff;border-color:var(--g4)}
+.btn-nav.primary:hover{background:var(--g5)}
+.btn-skip{background:transparent;border:none;color:var(--muted);font-size:.8rem;cursor:pointer;font-family:inherit;padding:.5rem;text-decoration:underline}
+.q-counter{text-align:center;padding:.5rem;font-size:.8rem;color:var(--muted)}
+
+/* ── RESULTS ── */
+#results{display:none;max-width:700px;margin:0 auto;padding:2rem 1rem}
+.result-header{text-align:center;margin-bottom:2rem}
+.result-badge{font-size:3.5rem;margin-bottom:.5rem}
+.result-title{font-family:'Fraunces',serif;font-size:2rem;font-weight:700;color:var(--g6)}
+.result-desc{color:var(--muted);margin-top:.3rem}
+.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.5rem}
+.score-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:1.25rem;text-align:center}
+.score-num{font-size:2.2rem;font-weight:800;color:var(--g4)}
+.score-label{font-size:.825rem;color:var(--muted);margin-top:.3rem;font-weight:500}
+.toefl-est{background:var(--g6);color:#fff;border-radius:var(--r);padding:1.25rem;text-align:center;margin-bottom:1.5rem}
+.toefl-score{font-size:2.8rem;font-weight:800;color:var(--g2);font-family:'Fraunces',serif}
+.toefl-label{font-size:.9rem;color:var(--g2);margin-top:.3rem}
+.section-scores{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.5rem}
+.ss-row{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem}
+.ss-name{flex:1;font-weight:600;font-size:.875rem;color:var(--g6)}
+.ss-bar-wrap{flex:2;background:var(--g1);border-radius:3px;height:7px;overflow:hidden}
+.ss-bar{height:100%;background:var(--g4);border-radius:3px;transition:.6s}
+.ss-pct{font-weight:800;font-size:.875rem;color:var(--g4);min-width:36px;text-align:right}
+.review-btn{width:100%;margin-bottom:.75rem}
+.back-btn{width:100%;background:transparent;border:1.5px solid var(--border)}
+
+/* review */
+#review{display:none;max-width:700px;margin:0 auto;padding:1rem}
+.review-q{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:.75rem}
+.review-top{display:flex;gap:.5rem;align-items:flex-start;margin-bottom:.75rem}
+.rev-num{min-width:28px;height:28px;background:var(--g4);color:#fff;border-radius:50%;font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rev-num.wrong{background:#DC2626}
+.rev-qtext{font-weight:600;font-size:.875rem;color:var(--g6);line-height:1.55}
+.rev-correct{font-size:.8rem;color:#15803d;font-weight:700;margin-top:.3rem}
+.rev-exp{font-size:.8rem;color:var(--muted);line-height:1.6;margin-top:.4rem;padding-top:.4rem;border-top:1px solid var(--g1)}
+
+/* watermark in corner */
+.watermark{position:fixed;bottom:1rem;right:1rem;font-size:.65rem;font-weight:800;color:var(--g2);letter-spacing:.2em;opacity:.6;pointer-events:none;z-index:9999}
+</style>
+</head>
+<body>
+<div class="watermark">JWOOBIM</div>
+
+<!-- COVER -->
+<div id="cover">
+  <div class="cover-stickers">🌿🐸🦋🌻🐝🐢🌳🍃</div>
+  <div class="cover-brand">TOEFL UNPAD</div>
+  <div class="cover-sub">Tryout & Latihan Lengkap · JWOOBIM</div>
+  <div class="cover-meta">
+    <div class="meta-pill"><span>140</span>Soal Total</div>
+    <div class="meta-pill"><span>4</span>Bagian Ujian</div>
+    <div class="meta-pill"><span>120'</span>Waktu Ujian</div>
+    <div class="meta-pill"><span>🌿</span>Hijau Pastel</div>
+  </div>
+  <button class="btn-primary" onclick="showSectionSelect()">Mulai Tryout →</button>
+  <div class="wm">JWOOBIM · TOEFL UNPAD · 2025</div>
+</div>
+
+<!-- SECTION SELECT -->
+<div id="section-select">
+  <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem">
+    <button onclick="showCover()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--g4)">←</button>
+    <div>
+      <div class="sec-title">Pilih Bagian</div>
+      <div class="sec-desc">Kerjakan semua bagian secara berurutan, atau pilih bagian tertentu untuk berlatih.</div>
+    </div>
+  </div>
+  <div class="sections-grid" id="sections-grid"></div>
+  <button class="btn-primary btn-start-all" onclick="startAll()">🚀 Mulai Semua (Mode Ujian Penuh)</button>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz">
+  <div class="quiz-header">
+    <div class="q-section-name" id="qSecName">Listening</div>
+    <div class="q-progress-text" id="qProgText">1 / 50</div>
+    <div class="timer" id="timer">--:--</div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div id="scriptArea"></div>
+  <div class="q-card">
+    <div class="q-num" id="qNum">1</div>
+    <div class="q-text" id="qText"></div>
+    <div class="options" id="optionsArea"></div>
+    <div id="expArea" style="display:none"></div>
+  </div>
+  <div class="nav-row">
+    <button class="btn-nav" id="btnPrev" onclick="prevQ()">← Sebelumnya</button>
+    <button class="btn-nav primary" id="btnNext" onclick="nextQ()">Selanjutnya →</button>
+  </div>
+  <div class="q-counter">
+    <button class="btn-skip" onclick="skipQ()">Lewati soal ini</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="results">
+  <div class="result-header">
+    <div class="result-badge" id="resBadge">🎉</div>
+    <div class="result-title" id="resTitle">Selamat!</div>
+    <div class="result-desc" id="resDesc"></div>
+  </div>
+  <div class="toefl-est">
+    <div class="toefl-score" id="toeflScore">—</div>
+    <div class="toefl-label">Estimasi Skor TOEFL ITP</div>
+  </div>
+  <div class="score-grid">
+    <div class="score-card"><div class="score-num" id="resCorrect">0</div><div class="score-label">Jawaban Benar</div></div>
+    <div class="score-card"><div class="score-num" id="resPct">0%</div><div class="score-label">Persentase</div></div>
+  </div>
+  <div class="section-scores" id="secScores"></div>
+  <button class="btn-primary review-btn" onclick="showReview()">📋 Lihat Review Jawaban</button>
+  <button class="btn-nav back-btn" onclick="showSectionSelect()">← Kembali ke Menu</button>
+</div>
+
+<!-- REVIEW -->
+<div id="review">
+  <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem">
+    <button onclick="backToResults()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--g4)">←</button>
+    <div class="sec-title">Review Jawaban</div>
+  </div>
+  <div id="reviewContent"></div>
+</div>
+
+<script>
+const SECTIONS = [
+  { id:'listen_a', name:'Listening Part A', icon:'🎧', detail:'Short Conversations — No. 1–20', count:20, time:20*60 },
+  { id:'listen_b', name:'Listening Part B', icon:'💬', detail:'Long Conversations — No. 21–35', count:15, time:15*60 },
+  { id:'listen_c', name:'Listening Part C', icon:'🎓', detail:'Academic Lectures — No. 36–50', count:15, time:15*60 },
+  { id:'structure', name:'Structure', icon:'📝', detail:'Melengkapi Kalimat — No. 1–15', count:15, time:15*60 },
+  { id:'we', name:'Written Expression', icon:'✏️', detail:'Temukan Error — No. 16–40', count:25, time:20*60 },
+  { id:'reading', name:'Reading Comprehension', icon:'📖', detail:'5 Teks Bacaan — No. 1–50', count:50, time:55*60 },
+];
+
+/* ─────────────── QUESTION DATA ─────────────── */
+const QS = {
+listen_a:[
+  {n:1,s:"Man: I can't believe how expensive textbooks are this semester!\nWoman: I know. I ended up borrowing most of mine from the library.",q:"What does the woman suggest about the textbooks?",o:["A. She bought all of them","B. She borrowed them from the library","C. She shared them with friends","D. She found them cheap"],a:"B",e:"Woman berkata 'I ended up borrowing most of mine from the library.'"},
+  {n:2,s:"Woman: Do you know when Professor Harris will be back from his conference?\nMan: His secretary said he'll return by Thursday at the latest.",q:"When will Professor Harris return?",o:["A. By Monday","B. By Wednesday","C. By Thursday at the latest","D. After the weekend"],a:"C",e:"Man mengatakan 'he'll return by Thursday at the latest.'"},
+  {n:3,s:"Man: The cafeteria was so crowded today I couldn't even find a seat.\nWoman: That always happens on the first week of the semester.",q:"What does the woman imply?",o:["A. The cafeteria is always crowded","B. The crowding is typical for the first week","C. She also couldn't find a seat","D. The cafeteria should be bigger"],a:"B",e:"Woman mengimplikasikan bahwa keramaian itu hal biasa di minggu pertama semester."},
+  {n:4,s:"Woman: I studied all night for the chemistry exam but I still failed.\nMan: Maybe you should try studying in shorter sessions spread over several days.",q:"What does the man suggest?",o:["A. Study harder next time","B. Skip the exam","C. Study in shorter sessions over several days","D. Ask the professor for extra credit"],a:"C",e:"Man menyarankan 'studying in shorter sessions spread over several days'."},
+  {n:5,s:"Man: Have you registered for next semester's courses yet?\nWoman: Not yet. The registration system kept crashing every time I tried.",q:"Why hasn't the woman registered?",o:["A. She forgot to register","B. The registration deadline passed","C. The registration system had technical problems","D. She couldn't decide which courses to take"],a:"C",e:"Woman menjelaskan bahwa sistem registrasi terus crash setiap kali dia mencoba."},
+  {n:6,s:"Woman: The lecture hall was freezing this morning. I could barely concentrate.\nMan: You should bring a jacket. They always set the air conditioning too high in that building.",q:"What does the man imply about the building?",o:["A. It is usually warm","B. It is always too cold because of the air conditioning","C. The heating system is broken","D. Students cannot wear jackets"],a:"B",e:"Man mengimplikasikan bangunan tersebut selalu terlalu dingin karena AC terlalu tinggi."},
+  {n:7,s:"Man: I need to submit my research paper by Friday but I haven't even started the bibliography.\nWoman: You should start now. A good bibliography takes longer than most people think.",q:"What does the woman advise?",o:["A. Ask for an extension","B. Start working on the bibliography immediately","C. Submit the paper without a bibliography","D. Ask a classmate for help"],a:"B",e:"Woman menyarankan 'You should start now' karena bibliography membutuhkan waktu lebih lama dari perkiraan."},
+  {n:8,s:"Woman: Did you hear that the campus bookstore is having a sale on all used textbooks?\nMan: Really? I wish I had known that before I bought all mine at full price.",q:"What can be inferred about the man?",o:["A. He did not need any textbooks","B. He already bought his textbooks at full price","C. He plans to return his textbooks","D. He will go to the sale"],a:"B",e:"Man menyesal: 'I wish I had known that before I bought all mine at full price.'"},
+  {n:9,s:"Man: Professor Lee's class is incredibly difficult. Half the class dropped it last week.\nWoman: I've heard that. But those who stay usually learn the most.",q:"What does the woman suggest?",o:["A. It is not worth taking","B. It is easy once you understand the material","C. Students who persevere gain a lot","D. The professor should simplify the course"],a:"C",e:"Woman: 'those who stay usually learn the most' = siswa yang bertahan paling banyak belajar."},
+  {n:10,s:"Woman: I can't find parking anywhere near the science building.\nMan: The construction on lot B has redirected everyone to the main lot.",q:"Why is it hard to find parking?",o:["A. There is a special event on campus","B. Construction on lot B has redirected parking","C. The main lot is under repair","D. Too many students drive to campus"],a:"B",e:"Man menjelaskan konstruksi di lot B telah mengalihkan semua kendaraan ke main lot."},
+  {n:11,s:"Man: I'm thinking of switching my major from biology to environmental science.\nWoman: That's a big decision. Have you talked to your academic advisor yet?",q:"What does the woman recommend?",o:["A. Stay in his current major","B. Switch to environmental science immediately","C. Consult his academic advisor","D. Take an environmental science course first"],a:"C",e:"Woman merekomendasikan agar man berbicara dengan academic advisor terlebih dahulu."},
+  {n:12,s:"Woman: The library closes at ten on weekdays but only at six on weekends.\nMan: That's inconvenient. I usually do most of my studying on Saturdays.",q:"What problem does the man have?",o:["A. He does not like the library","B. The library closes too early on the days he usually studies","C. He cannot find books at the library","D. The library is too far from his dorm"],a:"B",e:"Man merasa tidak nyaman karena perpustakaan tutup lebih awal di hari Sabtu."},
+  {n:13,s:"Man: The student union is organizing a free tutoring service starting next week.\nWoman: Oh, that's great! I could really use some help with my statistics course.",q:"What does the woman imply?",o:["A. She is good at statistics","B. She will volunteer as a tutor","C. She needs help with statistics","D. She organized the tutoring service"],a:"C",e:"Woman mengimplikasikan bahwa dia membutuhkan bantuan dengan mata kuliah statistik."},
+  {n:14,s:"Woman: I heard the internship application deadline was extended to the end of the month.\nMan: That's a relief. I was worried I wouldn't have enough time to prepare my portfolio.",q:"How does the man feel?",o:["A. Disappointed","B. Worried","C. Relieved","D. Confused"],a:"C",e:"Man berkata 'That's a relief' = lega karena ada lebih banyak waktu."},
+  {n:15,s:"Man: Did you end up going to the guest lecture on climate change yesterday?\nWoman: No, I had to work an extra shift at the cafe.",q:"Why didn't the woman attend the lecture?",o:["A. She forgot about it","B. She had to work","C. She was not interested","D. She had a class at the same time"],a:"B",e:"Woman menjelaskan 'I had to work an extra shift at the cafe.'"},
+  {n:16,s:"Woman: The new campus shuttle schedule is really confusing. Some routes have been completely eliminated.\nMan: I know. A lot of students have been complaining to the transportation office.",q:"What can be inferred about the change?",o:["A. Students are satisfied with the new schedule","B. The change has been unpopular with students","C. The transportation office designed it well","D. Fewer students use the shuttle now"],a:"B",e:"Man menyebutkan banyak mahasiswa mengeluh = perubahan tidak populer."},
+  {n:17,s:"Man: I'm applying for a graduate fellowship but the essay requirement is fifteen pages.\nWoman: That sounds daunting, but the fellowship stipend is worth the effort.",q:"What does the woman imply?",o:["A. It is not worth applying for","B. The financial reward justifies the difficult application","C. The essay is easy to write","D. The man should not apply"],a:"B",e:"Woman: 'the fellowship stipend is worth the effort' = tunjangan sepadan dengan usahanya."},
+  {n:18,s:"Woman: The professor returned our midterm papers. I got a B+, which is better than I expected.\nMan: Nice! I thought the exam was really difficult, so I was relieved to get a B.",q:"How did both students feel?",o:["A. Both were disappointed","B. Both were pleasantly surprised","C. Both thought they deserved higher grades","D. Both failed the exam"],a:"B",e:"Woman mendapat lebih dari yang diharapkan; Man merasa lega. Keduanya positif."},
+  {n:19,s:"Man: The computer lab is full of students writing their final essays.\nWoman: Finals week always does that. You should try coming early in the morning.",q:"What does the woman suggest?",o:["A. Use a different computer lab","B. Write the essay at home","C. Come to the lab early in the morning","D. Ask the lab assistant for help"],a:"C",e:"Woman menyarankan 'You should try coming early in the morning.'"},
+  {n:20,s:"Woman: I'm really nervous about my thesis defense next week.\nMan: You've been working on it for two years. I'm sure you know it better than anyone.",q:"What does the man imply?",o:["A. The woman should be more prepared","B. The woman is well-prepared for her defense","C. Two years is not enough time","D. The woman should postpone her defense"],a:"B",e:"Man mengimplikasikan bahwa woman sudah sangat siap karena telah bekerja selama dua tahun."},
+],
+listen_b:[
+  {n:21,s:"[Percakapan 1 – Advisor & Student]\nAdvisor: Good afternoon, Sarah. What brings you in today?\nStudent: Hi, I'm thinking of doing a semester abroad in Japan.\nAdvisor: The main thing you need to check is whether your credits will transfer properly.\nStudent: I already emailed the biology department chair. She said most lab courses wouldn't transfer due to accreditation differences.\nAdvisor: You might need to delay graduation, or take some courses online when you return.\nStudent: I'd prefer not to delay. The deadline to apply is in six weeks.\nAdvisor: Then start the application tonight.",q:"What is the main purpose of the student's visit?",o:["A. To request a letter of recommendation","B. To discuss options for studying abroad","C. To complain about her biology grades","D. To drop a course"],a:"B",e:"Student datang untuk membicarakan opsi studi di luar negeri di Jepang."},
+  {n:22,s:"[Percakapan 1 – lanjutan]",q:"What concern does the advisor raise?",o:["A. The cost of living in Japan","B. The language barrier","C. Whether credits will transfer properly","D. The application fee"],a:"C",e:"Advisor: 'The main thing you need to check is whether your credits will transfer properly.'"},
+  {n:23,s:"[Percakapan 1 – lanjutan]",q:"What did the biology department chair say?",o:["A. All courses would transfer","B. No courses would transfer","C. Most lab courses would not transfer due to accreditation differences","D. She should not go abroad"],a:"C",e:"Ketua departemen biologi berkata sebagian besar kursus lab tidak bisa ditransfer karena perbedaan akreditasi."},
+  {n:24,s:"[Percakapan 1 – lanjutan]",q:"What option does the student prefer to avoid?",o:["A. Taking online courses","B. Applying to the program","C. Delaying graduation","D. Emailing the department chair"],a:"C",e:"Student berkata 'I'd prefer not to delay graduation.'"},
+  {n:25,s:"[Percakapan 1 – lanjutan]",q:"When is the application deadline?",o:["A. In two weeks","B. In four weeks","C. In six weeks","D. In eight weeks"],a:"C",e:"Advisor menyebutkan 'the deadline is in six weeks.'"},
+  {n:26,s:"[Percakapan 2 – Field Trip]\nStudent 1: Hey Marcus, did you sign up for the environmental science field trip next month?\nStudent 2: I was planning to, but the sign-up sheet was full by the time I got to it.\nStudent 1: They'll be doing water quality testing and bird species counts. It counts for 30% of the final grade.\nStudent 2: 30%? Is there a waiting list?\nStudent 1: Email Professor Chen directly. Bring waterproof boots if you get in — the terrain is muddy.",q:"Why didn't Student 2 sign up for the field trip?",o:["A. He forgot about it","B. He was not interested","C. The sign-up sheet was already full","D. He has to work that day"],a:"C",e:"Student 2: 'the sign-up sheet was full by the time I got to it.'"},
+  {n:27,s:"[Percakapan 2 – lanjutan]",q:"What activities will students do on the field trip?",o:["A. Rock climbing and hiking","B. Water quality testing and bird species counts","C. Soil sampling and tree planting","D. Photography and painting"],a:"B",e:"Student 1 menyebutkan 'water quality testing and bird species counts.'"},
+  {n:28,s:"[Percakapan 2 – lanjutan]",q:"How much does the field trip count toward the final grade?",o:["A. Ten percent","B. Twenty percent","C. Thirty percent","D. Forty percent"],a:"C",e:"Student 1 berkata 'it counts for thirty percent of the final grade.'"},
+  {n:29,s:"[Percakapan 2 – lanjutan]",q:"What does Student 1 suggest Student 2 do?",o:["A. Drop the course","B. Email Professor Chen directly","C. Find another field trip","D. Ask a classmate to give up their spot"],a:"B",e:"Student 1 menyarankan 'You should email Professor Chen directly.'"},
+  {n:30,s:"[Percakapan 2 – lanjutan]",q:"What practical advice does Student 1 give?",o:["A. Bring extra food","B. Rent a car","C. Bring waterproof boots because the terrain can be muddy","D. Leave early to avoid traffic"],a:"C",e:"Student 1: 'bring waterproof boots... the terrain can be really muddy.'"},
+  {n:31,s:"[Percakapan 3 – Research Paper]\nStudent: I'm having trouble finding recent sources for my paper on urban heat islands.\nProfessor: Have you searched the university database? Try JSTOR and Science Direct. Filter by date.\nStudent: I didn't know about the date filter. Also, what else can I do?\nProfessor: Look at the reference lists of any good article you find. Your draft is due in two weeks — start today. My office hours are Thursday from two to four.",q:"What problem does the student have?",o:["A. She cannot decide on a topic","B. She is having trouble finding recent sources","C. Her paper is too long","D. She missed the deadline"],a:"B",e:"Student berkata 'I'm having trouble finding recent sources.'"},
+  {n:32,s:"[Percakapan 3 – lanjutan]",q:"What databases does the professor recommend?",o:["A. Google and Wikipedia","B. Google Scholar and PubMed","C. JSTOR and Science Direct","D. EBSCO and ProQuest"],a:"C",e:"Professor merekomendasikan 'JSTOR and Science Direct.'"},
+  {n:33,s:"[Percakapan 3 – lanjutan]",q:"What additional strategy does the professor suggest?",o:["A. Email other professors","B. Visit the physical library","C. Use the reference lists of good articles","D. Reduce the paper length"],a:"C",e:"Professor: 'look at the reference lists of any good article you find.'"},
+  {n:34,s:"[Percakapan 3 – lanjutan]",q:"When is the student's draft due?",o:["A. In one week","B. In two weeks","C. In three weeks","D. By Friday"],a:"B",e:"Student menyebutkan 'My draft is due in two weeks.'"},
+  {n:35,s:"[Percakapan 3 – lanjutan]",q:"When are the professor's office hours?",o:["A. Monday 10–12","B. Wednesday 1–3","C. Thursday 2–4","D. Friday 9–11"],a:"C",e:"Professor: 'My office hours are Thursday from two to four.'"},
+],
+listen_c:[
+  {n:36,s:"[Lecture: The Water Cycle]\nToday I'll discuss the water cycle — the continuous movement of water within the Earth and its atmosphere. It has four main stages: evaporation, condensation, precipitation, and collection. Evaporation occurs when water is heated by the sun. Plants also release water vapor — together with evaporation this is called evapotranspiration. As water vapor rises, it condenses around tiny particles of dust and salt to form clouds. Precipitation falls as rain, snow, sleet, or hail depending on temperature. Collection occurs when water gathers in oceans, rivers, and groundwater reservoirs. Human activities like deforestation can disrupt the cycle by reducing evapotranspiration and increasing surface runoff.",q:"What is the main topic of this lecture?",o:["A. Ocean currents","B. The four stages of the water cycle","C. Climate change effects","D. Groundwater pollution"],a:"B",e:"Dosen memperkenalkan water cycle dan menjelaskan keempat tahapannya."},
+  {n:37,s:"[Lecture: Water Cycle – lanjutan]",q:"What is evapotranspiration?",o:["A. Only evaporation from oceans","B. The combination of evaporation and plant transpiration","C. The condensation of water vapor","D. The movement of groundwater"],a:"B",e:"Dosen: evaporation + transpiration dari tanaman = evapotranspiration."},
+  {n:38,s:"[Lecture: Water Cycle – lanjutan]",q:"Around what do water vapors condense to form clouds?",o:["A. Ice crystals","B. Pollen grains","C. Tiny particles of dust and salt","D. Carbon dioxide molecules"],a:"C",e:"Dosen menyebutkan kondensasi terjadi 'around tiny particles of dust and salt.'"},
+  {n:39,s:"[Lecture: Water Cycle – lanjutan]",q:"What determines the form of precipitation?",o:["A. Wind speed","B. Cloud height","C. Temperature","D. Humidity level"],a:"C",e:"Dosen: 'rain, snow, sleet, or hail, depending on temperature.'"},
+  {n:40,s:"[Lecture: Water Cycle – lanjutan]",q:"How can human activities disrupt the water cycle?",o:["A. By increasing evaporation from oceans","B. By reducing evapotranspiration and increasing surface runoff","C. By creating more groundwater","D. By changing wind patterns"],a:"B",e:"Deforestation dan urbanization mengurangi evapotranspiration dan meningkatkan surface runoff."},
+  {n:41,s:"[Lecture: Behavioral Economics]\nTraditional economics assumes rational decisions. Behavioral economics challenges this by explaining irrational choices. Loss aversion (Kahneman & Tversky): people feel losing something more strongly than gaining the same amount. Anchoring effect: people rely on the first piece of information — e.g., a product marked down from $200 to $120 seems like a bargain even if $120 is the normal price. Choice overload: too many options paralyze people. Reducing options can increase satisfaction.",q:"What is the main argument of behavioral economics?",o:["A. People always make rational decisions","B. Economics should ignore psychology","C. People often make irrational choices that traditional economics cannot explain","D. All decisions are based on price alone"],a:"C",e:"Behavioral economics menantang asumsi bahwa orang selalu membuat keputusan rasional."},
+  {n:42,s:"[Lecture: Behavioral Economics – lanjutan]",q:"What does loss aversion mean?",o:["A. People avoid all financial decisions","B. People feel losing something more strongly than gaining the same amount","C. People always prefer to save money","D. People decide based only on potential gains"],a:"B",e:"Dosen: 'people feel the pain of losing something much more strongly than the pleasure of gaining the same thing.'"},
+  {n:43,s:"[Lecture: Behavioral Economics – lanjutan]",q:"Which researchers are mentioned in connection with loss aversion?",o:["A. Freud and Jung","B. Smith and Ricardo","C. Kahneman and Tversky","D. Maslow and Herzberg"],a:"C",e:"Dosen menyebutkan 'Research by Kahneman and Tversky.'"},
+  {n:44,s:"[Lecture: Behavioral Economics – lanjutan]",q:"How does the anchoring effect work in the store example?",o:["A. Customers compare prices across stores","B. Customers perceive $120 as a bargain because it was shown as discounted from $200","C. Customers always choose the cheapest product","D. Stores offer genuine discounts"],a:"B",e:"Harga awal $200 menjadi 'anchor' sehingga $120 terasa seperti penawaran murah."},
+  {n:45,s:"[Lecture: Behavioral Economics – lanjutan]",q:"What is choice overload?",o:["A. Too few options leads to bad decisions","B. People become paralyzed or choose poorly when given too many options","C. More options always lead to better decisions","D. Customers prefer stores with the most products"],a:"B",e:"Dosen: 'When given too many options, they often become paralyzed and make no decision at all.'"},
+  {n:46,s:"[Lecture: Coral Reefs]\nCoral reefs cover less than 1% of the ocean floor yet support 25% of all marine species — called the rainforests of the sea. Corals are animals (polyps), not plants. They build calcium carbonate skeletons and have a symbiotic relationship with algae called zooxanthellae: algae provide nutrients via photosynthesis; coral provides shelter and CO₂. When ocean temperatures rise 1–2°C, corals expel the algae, causing bleaching and death. Scientists estimate 70–90% of reefs could disappear by 2050. Conservation: marine protected areas and heat-resistant coral strains via selective breeding.",q:"Why are coral reefs called the rainforests of the sea?",o:["A. They cover most of the ocean floor","B. They produce most of the world's oxygen","C. They support 25% of all marine species despite covering less than 1% of the ocean floor","D. They are found in tropical regions"],a:"C",e:"Keanekaragaman hayati tinggi meskipun luas kecil, seperti hutan hujan."},
+  {n:47,s:"[Lecture: Coral Reefs – lanjutan]",q:"What are coral polyps?",o:["A. A type of plant","B. A type of algae","C. Tiny animals that build calcium carbonate skeletons","D. A species of fish that protects the reef"],a:"C",e:"Dosen: 'Corals are not plants — they are animals called polyps.'"},
+  {n:48,s:"[Lecture: Coral Reefs – lanjutan]",q:"What is the symbiotic relationship between coral and zooxanthellae?",o:["A. Coral eats zooxanthellae","B. Algae provide nutrients to coral while coral provides shelter and CO₂ to algae","C. Both organisms compete for food","D. Algae protect coral from predators"],a:"B",e:"Alga memberikan nutrisi melalui fotosintesis; coral memberikan tempat berlindung dan CO₂."},
+  {n:49,s:"[Lecture: Coral Reefs – lanjutan]",q:"What causes coral bleaching?",o:["A. Increased pollution from ships","B. Overfishing near the reef","C. A rise in ocean temperature that causes corals to expel zooxanthellae","D. A decrease in ocean salinity"],a:"C",e:"Kenaikan suhu menyebabkan coral mengusir zooxanthellae sehingga terjadi coral bleaching."},
+  {n:50,s:"[Lecture: Coral Reefs – lanjutan]",q:"What conservation efforts are mentioned?",o:["A. Banning all fishing worldwide","B. Draining polluted coastal areas","C. Establishing marine protected areas and developing heat-resistant coral strains","D. Introducing new predator species"],a:"C",e:"Dosen: 'establishing marine protected areas and developing heat-resistant coral strains.'"},
+],
+structure:[
+  {n:1,q:"_________ a mammal, the whale breathes air and nurses its young with milk.",o:["A. It is","B. Although","C. Being","D. That it is"],a:"C",e:"'Being a mammal' = reduced clause yang menjelaskan subjek 'the whale'. Opsi A dan D menciptakan dua main clause tanpa connector."},
+  {n:2,q:"_________ the enormous size of the project, the team completed it ahead of schedule.",o:["A. Despite","B. Although","C. Even","D. However"],a:"A",e:"'Despite' diikuti noun phrase (tidak butuh S+V). 'Although' diikuti klausa lengkap. 'Despite the enormous size' = preposisi + noun phrase."},
+  {n:3,q:"The report _________ by the committee will be presented at the annual conference.",o:["A. prepared","B. preparing","C. which preparing","D. has prepared"],a:"A",e:"'Prepared by the committee' = reduced passive clause (= which was prepared). Kalimat sudah punya main verb 'will be presented'."},
+  {n:4,q:"Rarely _________ such a comprehensive study of urban migration patterns.",o:["A. researchers have conducted","B. have researchers conducted","C. researchers conducted","D. did researchers conducts"],a:"B",e:"Setelah 'Rarely' di awal kalimat wajib inversi: auxiliary + S + V. 'Have researchers conducted' = struktur inversi yang benar."},
+  {n:5,q:"_________ photosynthesis, plants convert sunlight into chemical energy stored as sugar.",o:["A. In the process of","B. Processing","C. To process","D. They process"],a:"A",e:"'In the process of photosynthesis' = prepositional phrase sebagai adverb. Kalimat utama sudah memiliki S (plants) dan V (convert)."},
+  {n:6,q:"The ancient ruins _________ near the coast were discovered by accident during construction.",o:["A. found","B. finding","C. which finding","D. are found"],a:"A",e:"'Found near the coast' = reduced passive clause (= which were found). Kalimat sudah punya main verb 'were discovered'."},
+  {n:7,q:"Not only _________ the highest peak in the region but it is also one of the most difficult to climb.",o:["A. Mount Elara is","B. is Mount Elara","C. Mount Elara being","D. Mount Elara has"],a:"B",e:"Setelah 'Not only' wajib inversi: 'is Mount Elara'. Pola: Not only + be/aux + S + V."},
+  {n:8,q:"_________ with the rapid growth of the internet, privacy concerns have become increasingly complex.",o:["A. Coinciding","B. Coincided","C. It coincides","D. Coincidence"],a:"A",e:"'Coinciding with...' = participial phrase sebagai adverb modifier. Kalimat utama: S (privacy concerns) + V (have become)."},
+  {n:9,q:"_________ the new medication had side effects was not disclosed to patients initially.",o:["A. What","B. That","C. Which","D. How"],a:"B",e:"'That' digunakan sebagai noun clause connector. 'That the new medication had side effects' = subject dari 'was not disclosed'."},
+  {n:10,q:"Scientists studying climate change _________ that global temperatures will rise by two degrees by 2100.",o:["A. predicting","B. have predicted","C. prediction","D. to predict"],a:"B",e:"'Scientists studying climate change' = subject, butuh main verb. 'Have predicted' adalah present perfect yang benar."},
+  {n:11,q:"_________, Luxor did not reach preeminence until about 2,000 B.C.",o:["A. Many centuries earlier it was founded","B. The city founded centuries earlier","C. Although founded many centuries earlier","D. Founding the city centuries earlier"],a:"C",e:"Diperlukan connector 'Although' untuk klausa subordinat. 'Founded' = reduced passive. Opsi A tidak punya connector; B tidak ada verb utama."},
+  {n:12,q:"A fine tomb _________ marks the grave of the poet Chaucer.",o:["A. erected in the fifteenth century","B. being erected in the fifteenth century","C. which in the fifteenth century was erecting","D. erecting in the fifteenth century"],a:"A",e:"'Erected in the fifteenth century' = reduced passive clause (= which was erected). Opsi B = proses belum selesai; D = aktif, padahal tomb tidak bisa 'mendirikan'."},
+  {n:13,q:"Not until about a century after Julius Caesar landed in Britain _________ enough conquerors to control the island.",o:["A. Romans that","B. he has done","C. did the Romans","D. the Romans"],a:"C",e:"Setelah 'Not until...' wajib inversi: auxiliary + S + V. 'Did the Romans have' = struktur inversi benar. Opsi D tidak berinversi."},
+  {n:14,q:"_________ is as simple as it looks.",o:["A. Building adobe houses","B. Adobe houses built","C. Adobe houses building","D. Adobe houses which are built"],a:"A",e:"Gerund phrase 'Building adobe houses' = subject kalimat. Opsi B, C, D menggunakan 'Adobe houses' tapi tidak ada main verb yang valid."},
+  {n:15,q:"Square-rigged ships, _________ high speed only when traveling with the trade winds, are not used commercially nowadays.",o:["A. which can attain","B. can attain","C. when attaining","D. they can attain"],a:"A",e:"Diperlukan relative clause 'which can attain' untuk info tambahan. Opsi B dan D menciptakan dua main clause tanpa connector. Opsi C = temporal clause yang mengubah makna."},
+],
+we:[
+  {n:16,q:"If biennials (A) were planted this year, they (B) will be (C) likely (D) to bloom next year.",o:["A. were planted","B. will be","C. likely","D. to bloom"],a:"B",e:"Conditional type 2: if + past simple, ... WOULD + V1. 'Will be' harus diganti 'would be'."},
+  {n:17,q:"The value of the dollar (A) declines as the rate of inflation (B) the rate of (C) (D) raises.",o:["A. declines","B. as","C. the rate of","D. raises"],a:"D",e:"'Raises' = transitif (butuh objek). Harus 'rises' (intransitif = naik sendiri). Inflation 'rises', bukan 'raises'."},
+  {n:18,q:"The differential attractions of the sun and the moon (A) have a direct (B) effect (C) in the rising and falling (D) of the tides.",o:["A. have","B. effect","C. in","D. of the tides"],a:"C",e:"Kolokasi benar: 'effect ON something'. 'Effect in' tidak gramatikal."},
+  {n:19,q:"With special enzymes that (A) are call restriction enzyme, it is possible (B) to split off segments of DNA (C) from (D) the donor organism.",o:["A. are call","B. to split off","C. from","D. the donor"],a:"A",e:"'Are call' harus 'are called' (passive: be + past participle)."},
+  {n:20,q:"Because of the movement of a glacier, the (B) form (A) of the Great Salt Lake (C) was very (D) slow.",o:["A. Because of","B. form","C. of the Great Salt Lake","D. very slow"],a:"B",e:"'Form' harus 'formation' (noun proses = pembentukan)."},
+  {n:21,q:"The temperature in the laboratory must be (A) kept constant (B) if the experiment (C) is to producing (D) accurate results.",o:["A. kept constant","B. if the experiment","C. is to producing","D. accurate results"],a:"C",e:"'Is to producing' harus 'is to produce'. Pola: be + to + V1 (infinitive tanpa -ing)."},
+  {n:22,q:"Iron is (A) the most (B) abundantly (C) metal found (D) in the Earth's crust.",o:["A. the most","B. abundantly","C. metal found","D. in the Earth's crust"],a:"B",e:"'Abundantly' (adverb) harus 'abundant' (adjective) karena memodifikasi noun 'metal'."},
+  {n:23,q:"The committee (A) has not yet (B) reached a decision (C) because of disagreements (D) among its member.",o:["A. has not yet","B. reached a decision","C. because of disagreements","D. among its member"],a:"D",e:"'Its member' harus 'its members'. Committee terdiri dari banyak orang = plural."},
+  {n:24,q:"Many of the (A) tourists who visit (B) the national park each year is (C) surprised by (D) its vastness.",o:["A. tourists who visit","B. the national park each year","C. is surprised","D. its vastness"],a:"C",e:"Subject = 'many of the tourists' = plural, sehingga 'is surprised' harus 'are surprised'."},
+  {n:25,q:"The scientist (A) who discovered (B) the vaccine (C) received wide (D) recognition for her achieve.",o:["A. who discovered","B. the vaccine","C. received wide","D. recognition for her achieve"],a:"D",e:"'Her achieve' harus 'her achievement'. 'Achieve' adalah verb; dibutuhkan noun 'achievement'."},
+  {n:26,q:"The new (A) highway that (B) connects the two cities (C) reduces (D) considerably the travel time.",o:["A. new","B. connects the two cities","C. reduces","D. considerably the travel time"],a:"D",e:"Adverb 'considerably' harus sebelum verb: 'considerably reduces the travel time'."},
+  {n:27,q:"Astronomers have (A) recently discovered (B) that the universe (C) is expand (D) at an accelerating rate.",o:["A. recently discovered","B. that the universe","C. is expand","D. at an accelerating rate"],a:"C",e:"'Is expand' harus 'is expanding'. Pola progressive: be + V-ing."},
+  {n:28,q:"The ancient manuscript (A) was written in (B) a language which (C) only few scholars (D) can interpret.",o:["A. was written in","B. a language which","C. only few scholars","D. can interpret"],a:"C",e:"'Only few scholars' harus 'only a few scholars'. 'Few' membutuhkan artikel 'a'."},
+  {n:29,q:"Despite of (A) the cold weather, (B) the farmers (C) continued to work (D) in the fields.",o:["A. Despite of","B. the cold weather","C. continued to work","D. in the fields"],a:"A",e:"'Despite of' salah. Preposisi yang benar: 'Despite' saja (tanpa 'of'). Alternatif: 'In spite of'."},
+  {n:30,q:"(A) Sprinkler system (B) have proven (C) to be the most effective (D) means of fighting hotel fires.",o:["A. Sprinkler system","B. have proven","C. to be","D. means"],a:"B",e:"'Sprinkler system' = singular → 'has proven', bukan 'have proven'."},
+  {n:31,q:"A supersonic airplane can fly faster than (A) (B) (C) (D) a speed of sound.",o:["A. supersonic","B. can fly","C. faster","D. a speed"],a:"D",e:"'A speed' harus 'the speed'. 'Speed of sound' = konsep spesifik dan unik → definite article 'the'."},
+  {n:32,q:"In 1821, Emma Willard (A) opened officially the doors of the first school in the United States (C) to offer (D) college-level courses for women.",o:["A. opened officially","B. the doors","C. to offer","D. college-level courses"],a:"A",e:"'Opened officially' harus 'officially opened'. Adverb harus sebelum main verb."},
+  {n:33,q:"The first gummed postage stamps (A) (B) issued in New York City (C) in 1842 (D).",o:["A. gummed","B. stamps","C. issued","D. in 1842"],a:"C",e:"'Issued' harus 'were issued'. Tanpa auxiliary 'were', kalimat tidak punya main verb."},
+  {n:34,q:"(A) Typical long bone (B) such as the femur (C) consists of a long shaft with (D) swellings at each end.",o:["A. Typical","B. such as","C. consists of","D. swellings"],a:"A",e:"'Typical long bone' butuh artikel 'A': 'A typical long bone'. Singular countable noun tanpa artikel tidak gramatikal."},
+  {n:35,q:"The common octopus lives (A) lone in a den just big enough (C) for (D) its body.",o:["A. lone","B. in","C. just big","D. its"],a:"A",e:"'Lone' (adjective) harus 'alone' (adverb). Setelah verb 'lives' dibutuhkan adverb."},
+  {n:36,q:"The fact that the sophisticated technology (A) has become part of (B) revolution in travel (C) delivery system has not made travel schedule (D) less hectic.",o:["A. has become","B. revolution","C. delivery system","D. less hectic"],a:"B",e:"'Revolution' harus 'a revolution'. Penggunaan pertama dalam konteks umum → indefinite article 'a'."},
+  {n:37,q:"Balanchine's (A) plotless ballets, (B) such Jewels and The Four Temperaments, (C) present dance (D) purely as a celebration of movement.",o:["A. plotless","B. such","C. present","D. purely"],a:"B",e:"'Such' harus 'such as'. Untuk memberi contoh, preposisi yang benar = 'such as'."},
+  {n:38,q:"In a solar battery, a photosensitive semiconducting substance such as silicon crystal is the source of (A) (B) (C) (D) electrician.",o:["A. semiconducting","B. such as","C. the source of","D. electrician"],a:"D",e:"'Electrician' (tukang listrik) harus 'electricity' (energi listrik). Kesalahan word form."},
+  {n:39,q:"(A) In early days, hydrochloric acid (B) was done by (C) heating a mixture of sodium chloride (D) with iron sulfate.",o:["A. In early days","B. was done","C. heating","D. with"],a:"B",e:"'Was done' harus 'was made' atau 'was produced'. Asam klorida tidak 'dilakukan'."},
+  {n:40,q:"Never in the story of humanity (A) (B) there have been (C) more people (D) living on this relatively small planet.",o:["A. in the story","B. there have been","C. more people","D. living"],a:"B",e:"Setelah 'Never' di awal kalimat wajib inversi: 'have there been'. Pola: Never + aux + S + V."},
+],
+reading:[
+  {n:1,p:"The education of deaf people has a long history. In the past, some educators preferred to teach sign language, while others emphasized trying to teach deaf people to speak.\n\nThe first known teacher of the deaf was Pedro Ponce de Leon, a Benedictine monk, who tutored children of the nobility in the 1570s. He had some success in teaching deaf children to speak and write.\n\nFrance was one of the leaders in education of the deaf. Around 1600, Juan Bonet published the first book on teaching the deaf. In 1775 in Paris, Abbe Charles Michel de l'Epee founded a free school that taught sign language. Over the next several decades, this school's method became famous as the 'French method.'\n\nIn America, the first school for deaf students was not founded until April 15, 1817. Thomas Gallaudet founded the American Asylum for the Education of the Deaf and Dumb in Hartford, Connecticut. He hired Laurent Clerc, a deaf Frenchman, to teach. Clerc was one of the most influential educators in early American deaf education.\n\nIn 1857, Edward Minor Gallaudet became principal of the Columbia Institution for the Deaf and Dumb, which eventually became Gallaudet College, the only liberal arts institution for the deaf.",q:"What is the main topic of this passage?",o:["A. Gallaudet College","B. The French method of educating deaf students","C. The history of deaf education","D. The oral method of deaf education"],a:"C",e:"Teks membahas sejarah pendidikan tunarungu secara kronologis dari abad ke-16 hingga ke-19."},
+  {n:2,p:"[Teks 1 – lanjutan]",q:"Why is Pedro Ponce de Leon mentioned?",o:["A. He was the first known teacher of the deaf","B. He taught a manual alphabet similar to the one used today","C. He advocated a combination of oral and manual methods","D. He was an educator at Gallaudet College"],a:"A",e:"Teks eksplisit: 'The first known teacher of the deaf was Pedro Ponce de Leon.'"},
+  {n:3,p:"[Teks 1 – lanjutan]",q:"The word 'tutored' is closest in meaning to:",o:["A. encouraged","B. taught","C. supported","D. led"],a:"B",e:"'Tutored' = mengajar secara privat. Sinonim: 'taught'."},
+  {n:4,p:"[Teks 1 – lanjutan]",q:"What is stated about Juan Bonet?",o:["A. He developed sign language in France","B. He was the first teacher of the deaf","C. He wrote the first book on educating the deaf","D. He founded a school for the deaf in Paris"],a:"C",e:"Teks: 'Bonet published the first book on teaching the deaf.'"},
+  {n:5,p:"[Teks 1 – lanjutan]",q:"'This school's method' in paragraph 3 refers to:",o:["A. Juan Bonet's school","B. Manuel Ramirez de Carrion's school","C. The American School for the Deaf","D. Charles Michel de l'Epee's school"],a:"D",e:"Kalimat sebelumnya menyebut sekolah de l'Epee di Paris sebagai referensinya."},
+  {n:6,p:"[Teks 1 – lanjutan]",q:"The word 'institution' is closest in meaning to:",o:["A. organization","B. system","C. school","D. building"],a:"A",e:"'Institution' = lembaga/organisasi mapan. 'Organization' adalah sinonim paling tepat."},
+  {n:7,p:"[Teks 1 – lanjutan]",q:"Why was the first American school for the deaf founded in 1817?",o:["A. Because sign language became popular","B. Because a French teacher moved to America","C. Because there was a sufficient population to support it","D. Because the government required it"],a:"C",e:"Teks: '...because that was when an American city had a concentration of people large enough to sustain a permanent institution.'"},
+  {n:8,p:"[Teks 1 – lanjutan]",q:"The word 'influential' is closest in meaning to:",o:["A. powerful","B. important","C. wealthy","D. famous"],a:"B",e:"'Influential' = berpengaruh. Sinonim paling tepat dalam konteks pendidik: 'important'."},
+  {n:9,p:"[Teks 1 – lanjutan]",q:"Which is mentioned about Gallaudet College?",o:["A. It was founded in France","B. It only teaches sign language","C. It is the only liberal arts college for the deaf","D. It was established in 1817"],a:"C",e:"Teks: '...Gallaudet College, the only liberal arts institution for the deaf.'"},
+  {n:10,p:"[Teks 1 – lanjutan]",q:"The word 'advocated' is closest in meaning to:",o:["A. rejected","B. avoided","C. supported","D. explained"],a:"C",e:"'Advocated' = secara aktif mendukung. Sinonim: 'supported'."},
+  {n:11,p:"[Teks 1 – lanjutan]",q:"The tone of the passage is best described as:",o:["A. emotional","B. critical","C. informative","D. persuasive"],a:"C",e:"Teks menyampaikan fakta historis secara objektif = tone informatif."},
+  {n:12,p:"The recent death of trumpeter Miles Davis brought an end to one of the most celebrated careers in the history of jazz. Few musicians have ever enjoyed such popularity for so long. Yet it must be said that Miles reached the artistic high point of his career in the 1950s.\n\nDavis came to New York City from the Midwest in the mid-1940s. Studying at the Juilliard School of Music by day, he haunted the city's jazz clubs by night. Bebop was being played by Charlie Parker, Dizzy Gillespie, and Thelonious Monk, and Davis was sometimes invited to play with them.\n\nDavis's sound and style set him apart. Rather than filling the air with a headlong rush of musical notes, Davis played sparingly. This 'less-is-more' approach became the basis of 'Cool' jazz. The Miles Davis quintet produced recordings culminating in the classic Kind of Blue.\n\nAlthough Kind of Blue represents the high-water mark of Davis's career, his artistic decline was not immediately apparent. In the early 1960s he produced some excellent albums. After issuing In a Silent Way in 1969, Davis opted for an electronic 'fusion' sound that blurred the lines between jazz and rock. Yet he continued to enjoy a lucrative career and public adulation.",q:"The best title for this passage would be:",o:["A. Jazz in the 1950s","B. The Death of Miles Davis","C. Playing Less Is Playing More","D. Miles Davis, A Leading Jazz Musician"],a:"D",e:"Teks membahas seluruh karier Miles Davis secara menyeluruh. Judul terbaik = mencakup keseluruhan."},
+  {n:13,p:"[Teks 2 – lanjutan]",q:"'Show the way' is closest in meaning to:",o:["A. perform music","B. teach other musicians","C. imitate others","D. create new instruments"],a:"B",e:"'Show the way' = menunjukkan jalan/menjadi panutan bagi musisi lain."},
+  {n:14,p:"[Teks 2 – lanjutan]",q:"'Haunted' is closest in meaning to:",o:["A. visited","B. owned","C. avoided","D. managed"],a:"A",e:"'Haunted' idiomatis = sering mengunjungi. Sinonim: 'frequented/visited'."},
+  {n:15,p:"[Teks 2 – lanjutan]",q:"'Set him apart' is closest in meaning to:",o:["A. confused him","B. separated him","C. distinguished him","D. limited him"],a:"C",e:"'Set him apart' = membuatnya menonjol/berbeda. Sinonim: 'distinguished'."},
+  {n:16,p:"[Teks 2 – lanjutan]",q:"'Sparingly' is closest in meaning to:",o:["A. loudly","B. minimally","C. quickly","D. repeatedly"],a:"B",e:"'Sparingly' = dengan hemat/sedikit. Davis bermain minimalis."},
+  {n:17,p:"[Teks 2 – lanjutan]",q:"'Counter-revolution' is closest in meaning to:",o:["A. rejection of jazz","B. return to traditional music","C. a stylistic alternative to bebop","D. imitation of bebop"],a:"C",e:"'Counter-revolution' = gerakan berlawanan dengan bebop → Cool jazz sebagai alternatif."},
+  {n:18,p:"[Teks 2 – lanjutan]",q:"What can be inferred about Davis's music in the early 1960s?",o:["A. It declined rapidly","B. It was no longer popular","C. It was still of high quality","D. He stopped recording"],a:"C",e:"Teks: 'he produced some excellent albums' di awal 1960-an."},
+  {n:19,p:"[Teks 2 – lanjutan]",q:"Davis's switch to fusion music:",o:["A. improved jazz music","B. kept his original style","C. confused critics","D. alienated many of his fans"],a:"D",e:"Penggemar lama merasa 'it was as if he had already fallen silent' setelah Davis beralih ke fusion."},
+  {n:20,p:"[Teks 2 – lanjutan]",q:"'Adulation' is closest in meaning to:",o:["A. criticism","B. admiration","C. confusion","D. popularity"],a:"B",e:"'Adulation' = kekaguman yang berlebihan. Sinonim: 'admiration'."},
+  {n:21,p:"[Teks 2 – lanjutan]",q:"The final sentence suggests:",o:["A. Davis retired from music","B. Davis lost his original followers","C. Davis became more famous","D. Davis moved away"],a:"B",e:"Penggemar era 1950-an seolah-olah Davis sudah 'jatuh sunyi' = mereka tidak lagi terhubung."},
+  {n:22,p:"[Teks 2 – lanjutan]",q:"The passage is primarily concerned with:",o:["A. criticizing Davis","B. comparing styles of jazz","C. outlining Davis's career","D. explaining jazz theory"],a:"C",e:"Teks secara kronologis memaparkan karier Davis dari awal hingga akhir."},
+  {n:23,p:"[Teks 2 – lanjutan]",q:"The tone of the passage can best be described as:",o:["A. emotional","B. subjective","C. objective","D. persuasive"],a:"B",e:"Penulis menunjukkan opini pribadi seperti 'it must be said' dan 'disappointingly' = tone subjektif."},
+  {n:24,p:"Scientists have discovered that trees can communicate distress signals when they are dehydrated. These signals are not audible to the human ear because they occur at frequencies between 50 and 500 kilohertz, far above the upper limit of human hearing at about 20 kilohertz.\n\nThe sounds are produced when columns of water inside the trees are broken due to a lack of water. These fractured columns create vibrations that travel through the tree. Researchers believe insects may detect these vibrations to locate weakened trees.\n\nWhile some scientists initially believed the sounds might be communication between trees, further studies suggest they are simply physical responses to stress. However, the possibility that other organisms respond to these vibrations remains an area of ongoing research.\n\nResearchers are now conducting further experiments to determine whether these sounds can be used as indicators of plant health and to develop methods for early detection of drought stress in crops.",q:"The main topic of the passage:",o:["A. Communication between insects","B. Tree growth patterns","C. The sounds made by distressed trees","D. The structure of trees"],a:"C",e:"Seluruh teks membahas sinyal suara yang dihasilkan pohon saat stres."},
+  {n:25,p:"[Teks 3 – lanjutan]",q:"The main idea of the passage:",o:["A. Trees can produce sounds when under stress","B. Insects destroy trees","C. Trees communicate with humans","D. Trees only make sounds at night"],a:"A",e:"Ide utama: pohon menghasilkan sinyal suara saat mengalami stres."},
+  {n:26,p:"[Teks 3 – lanjutan]",q:"'Them' in paragraph 2 refers to:",o:["A. scientists","B. vibrations","C. trees","D. insects"],a:"B",e:"'Them' merujuk pada 'these vibrations': 'detect these vibrations and use them to locate weakened trees.'"},
+  {n:27,p:"[Teks 3 – lanjutan]",q:"'Dehydrated' is closest in meaning to:",o:["A. green","B. wet","C. lacking water","D. broken"],a:"C",e:"'Dehydrated' = kekurangan air."},
+  {n:28,p:"[Teks 3 – lanjutan]",q:"'Plight' is closest in meaning to:",o:["A. difficult condition","B. location","C. growth","D. system"],a:"A",e:"'Plight' = kondisi sulit/memprihatinkan."},
+  {n:29,p:"[Teks 3 – lanjutan]",q:"The sounds produced by trees:",o:["A. can be heard by humans","B. are identical for all trees","C. cannot be heard by the unaided human ear","D. occur below 20 kilohertz"],a:"C",e:"Suara terjadi pada 50–500 kHz, jauh di atas batas pendengaran manusia (20 kHz)."},
+  {n:30,p:"[Teks 3 – lanjutan]",q:"'Fractured' is closest in meaning to:",o:["A. smooth","B. broken","C. moving","D. wet"],a:"B",e:"'Fractured' = patah/retak. Sinonim: 'broken'."},
+  {n:31,p:"[Teks 3 – lanjutan]",q:"What causes the distress signals?",o:["A. Insects","B. Lack of water","C. Sunlight","D. Temperature"],a:"B",e:"Teks: 'columns of water broken due to a lack of water.'"},
+  {n:32,p:"[Teks 3 – lanjutan]",q:"'Pick up' is closest in meaning to:",o:["A. ignore","B. perceive or detect","C. stop","D. carry"],a:"B",e:"'Pick up' dalam konteks sains = mendeteksi. Sinonim: 'perceive/detect'."},
+  {n:33,p:"[Teks 3 – lanjutan]",q:"Research on distress signals:",o:["A. was discontinued","B. was continuing","C. had been unsuccessful","D. had been completed years ago"],a:"B",e:"Paragraf terakhir: 'Researchers are NOW conducting FURTHER experiments' = masih berlangsung."},
+  {n:34,p:"The best-known theory of galactic evolution is the one originated in the 1920s by Edwin P. Hubble. According to this theory, a galaxy begins as a vast accumulation of gases, chiefly hydrogen and helium, rotating about a central point.\n\nThanks to mutual gravitational attraction, this 'protogalaxy' slowly condenses into billions of stars in a gigantic spherical cloud — what Hubble called an 'ellipsoidal' galaxy.\n\nOver millions of years, gravity causes such a galaxy to contract, flatten, and become increasingly congested near its center. Due to the law of conservation of angular momentum, it begins to rotate more and more rapidly.\n\nThe centrifugal force generated finally scatters material from the galaxy's outer edges thousands of light years into space. This is how the 'spiral' galaxy, with its compact nucleus and spiraling outer arms, is formed.",q:"'Originated' is closest in meaning to:",o:["A. begun","B. declared","C. proposed","D. cultivated"],a:"C",e:"'Originated' = dikemukakan/diajukan sebagai teori. Sinonim ilmiah: 'proposed'."},
+  {n:35,p:"[Teks 4 – lanjutan]",q:"A characteristic of a galaxy at its origin:",o:["A. its lack of hydrogen and helium","B. a compact nucleus","C. its initial rotation around one point","D. its spiraling arms"],a:"C",e:"Teks: 'rotating about a central point' = rotasi awal di sekitar satu titik."},
+  {n:36,p:"[Teks 4 – lanjutan]",q:"A 'protogalaxy':",o:["A. consists of spherical clouds","B. ignores physical laws","C. is a great mass of gas","D. results from a spiral galaxy"],a:"C",e:"Teks: 'vast accumulation of gases' = massa gas yang sangat besar."},
+  {n:37,p:"[Teks 4 – lanjutan]",q:"All true about an ellipsoidal galaxy as it ages EXCEPT:",o:["A. It becomes flatter","B. It develops a dense center","C. It contracts","D. It creates more hydrogen"],a:"D",e:"Teks menyebut kontraksi, mendatar, padat di tengah. Tidak ada tentang 'menciptakan lebih banyak hidrogen'."},
+  {n:38,p:"[Teks 4 – lanjutan]",q:"The law of conservation of angular momentum causes:",o:["A. congestion at the core","B. slower rotation","C. scattering of matter","D. the galaxy to rotate faster"],a:"D",e:"Teks: 'begins to rotate more and more rapidly' akibat hukum tersebut."},
+  {n:39,p:"[Teks 4 – lanjutan]",q:"A spiral galaxy:",o:["A. is visible without a telescope","B. results from increasing rotation","C. is spherical","D. is evenly distributed"],a:"B",e:"Centrifugal force dari rotasi semakin cepat membentuk galaksi spiral."},
+  {n:40,p:"[Teks 4 – lanjutan]",q:"'Compact' most nearly means:",o:["A. oblong","B. twisted","C. dense","D. static"],a:"C",e:"'Compact' = padat/terkompresi. Sinonim: 'dense'."},
+  {n:41,p:"[Teks 4 – lanjutan]",q:"The purpose of the passage:",o:["A. a theory of galaxy evolution","B. a physics law","C. gravity only","D. multiple theories"],a:"A",e:"Teks mendeskripsikan teori evolusi galaksi menurut Hubble."},
+  {n:42,p:"[Teks 4 – lanjutan]",q:"The paragraph following this would most likely be about:",o:["A. galaxy arms","B. scattering matter","C. other galaxy types","D. gravity"],a:"C",e:"Teks sudah menjelaskan ellipsoidal dan spiral → paragraf berikutnya = jenis galaksi lain."},
+  {n:43,p:"Sea otters dwell in the North Pacific. They are the largest of the mustelids, a group which also includes freshwater otters, weasels, and badgers.\n\nUnlike most marine mammals, sea otters lack a layer of blubber, and therefore have to eat up to 30% of their body weight a day to maintain body heat.\n\nTheir voracious appetites do not create food shortages because they are picky eaters, each animal preferring only a few food types. Sea otters play an important environmental role by protecting forests of seaweed called kelp. Certain sea otters feast on invertebrates like sea urchins and abalones that destroy kelp.\n\nSea otters keep warm by means of their luxuriant double-layered fur, the densest among animals. The soft outer fur forms a protective cover that keeps the fine underfur dry. Unfortunately, this feature almost led to their extinction, as commercial fur hunters drastically reduced their numbers.\n\nUnder government protection, the sea otter population has recovered. While elated by the otters' return, scientists are concerned about California sea otter population growth of only 5% a year compared to 18% in Alaska. In 1989 up to 5,000 sea otters perished when the Exxon Valdez spilled oil in Prince William Sound.",q:"What are mustelids?",o:["A. Marine mammals with blubber","B. A type of sea otter","C. A group of mammals that includes sea otters","D. Sea creatures like crabs"],a:"C",e:"Teks: 'the largest of the mustelids, a group which also includes freshwater otters, weasels, and badgers.'"},
+  {n:44,p:"[Teks 5 – lanjutan]",q:"A sea otter weighing 100 pounds must eat daily:",o:["A. 60 pounds","B. 30 pounds","C. 15 pounds","D. 5 pounds"],a:"B",e:"30% x 100 pounds = 30 pounds per hari."},
+  {n:45,p:"[Teks 5 – lanjutan]",q:"Why are sea otters called 'picky eaters'?",o:["A. They eat many types of food","B. They eat only one type","C. They have a big appetite","D. Each prefers only a few food types"],a:"D",e:"Teks: 'each animal preferring only a few food types.'"},
+  {n:46,p:"[Teks 5 – lanjutan]",q:"'Exhausted' means:",o:["A. desired","B. used up or depleted","C. needed","D. tired"],a:"B",e:"'Exhausted' dalam konteks sumber daya = habis/terkuras."},
+  {n:47,p:"[Teks 5 – lanjutan]",q:"The relationship between sea otters and kelp:",o:["A. Sea otters destroy kelp","B. Sea otters eat kelp","C. Sea otters protect kelp forests","D. Sea otters remove nutrients from kelp"],a:"C",e:"Teks: 'protecting forests of seaweed called kelp.'"},
+  {n:48,p:"[Teks 5 – lanjutan]",q:"'Luxuriant' is closest in meaning to:",o:["A. abundant or thick","B. soft","C. expensive","D. attractive"],a:"A",e:"'Luxuriant' = lebat/tebal. Sinonim: 'abundant/thick'."},
+  {n:49,p:"[Teks 5 – lanjutan]",q:"The function of the outer fur:",o:["A. It is finer than the underfur","B. It is less soft","C. It is commercially valuable","D. It keeps the underfur dry"],a:"D",e:"Teks: 'keeps the fine underfur dry.'"},
+  {n:50,p:"[Teks 5 – lanjutan]",q:"'Elated' is closest in meaning to:",o:["A. concerned","B. disappointed","C. overjoyed or very happy","D. shocked"],a:"C",e:"'Elated' = sangat gembira. Sinonim: 'overjoyed/very happy'."},
+]};
+
+/* ─────────────── STATE ─────────────── */
+let state = {
+  mode:'single', sections:[], curSec:0, curQ:0,
+  answers:{}, timer:null, timeLeft:0
+};
+
+/* ─────────────── NAV ─────────────── */
+function showCover(){hide('section-select');hide('quiz');hide('results');hide('review');show('cover')}
+function showSectionSelect(){hide('cover');hide('quiz');hide('results');hide('review');show('section-select');renderSections()}
+function backToResults(){hide('review');show('results')}
+function show(id){document.getElementById(id).style.display=''}
+function hide(id){document.getElementById(id).style.display='none'}
+
+/* ─────────────── SECTIONS ─────────────── */
+function renderSections(){
+  const grid=document.getElementById('sections-grid');
+  grid.innerHTML=SECTIONS.map(s=>{
+    const qs=QS[s.id]||[];
+    const answered=qs.filter(q=>state.answers[s.id+'_'+q.n]!=null).length;
+    const done=answered===qs.length;
+    return `<div class="sec-card${done?' done':''}" onclick="startSection('${s.id}')">
+      <div class="sec-icon">${s.icon}</div>
+      <div class="sec-info">
+        <div class="sec-name">${s.name}</div>
+        <div class="sec-detail">${s.detail}</div>
+      </div>
+      <div class="sec-badge${done?' done':''}">${done?'✓ Selesai':answered+'/'+s.count+' dijawab'}</div>
+    </div>`;
+  }).join('');
+}
+
+function startAll(){
+  state.mode='all';
+  state.sections=SECTIONS.map(s=>s.id);
+  state.curSec=0;
+  state.curQ=0;
+  state.answers={};
+  beginSection();
+}
+
+function startSection(id){
+  state.mode='single';
+  state.sections=[id];
+  state.curSec=0;
+  state.curQ=0;
+  beginSection();
+}
+
+function beginSection(){
+  const sid=state.sections[state.curSec];
+  const sec=SECTIONS.find(s=>s.id===sid);
+  clearInterval(state.timer);
+  state.timeLeft=sec.time;
+  startTimer();
+  hide('section-select');
+  show('quiz');
+  renderQ();
+}
+
+/* ─────────────── TIMER ─────────────── */
+function startTimer(){
+  const el=document.getElementById('timer');
+  state.timer=setInterval(()=>{
+    state.timeLeft--;
+    const m=Math.floor(state.timeLeft/60).toString().padStart(2,'0');
+    const s=(state.timeLeft%60).toString().padStart(2,'0');
+    el.textContent=m+':'+s;
+    el.className='timer'+(state.timeLeft<300?' danger':state.timeLeft<600?' warn':'');
+    if(state.timeLeft<=0){clearInterval(state.timer);nextSection()}
+  },1000);
+}
+
+/* ─────────────── RENDER QUESTION ─────────────── */
+function renderQ(){
+  const sid=state.sections[state.curSec];
+  const qs=QS[sid];
+  const q=qs[state.curQ];
+  const total=qs.length;
+  const sec=SECTIONS.find(s=>s.id===sid);
+  const answered=state.answers[sid+'_'+q.n];
+
+  document.getElementById('qSecName').textContent=sec.name;
+  document.getElementById('qProgText').textContent=(state.curQ+1)+' / '+total;
+  document.getElementById('progressFill').style.width=((state.curQ+1)/total*100)+'%';
+  document.getElementById('qNum').textContent=q.n;
+  document.getElementById('qText').textContent=q.q;
+
+  // script/passage
+  const sa=document.getElementById('scriptArea');
+  if(q.s&&!q.s.startsWith('[')){
+    sa.innerHTML=`<div class="script-box"><div class="script-label">📻 Script Percakapan</div>${q.s.split('\n').map(l=>`<div>${l||'&nbsp;'}</div>`).join('')}</div>`;
+  } else if(q.p&&!q.p.startsWith('[')){
+    sa.innerHTML=`<div class="passage-box">${q.p.split('\n\n').map(p=>`<p>${p}</p>`).join('')}</div>`;
+  } else {
+    sa.innerHTML='';
+  }
+
+  // options
+  const oa=document.getElementById('optionsArea');
+  const letters=['A','B','C','D'];
+  oa.innerHTML=q.o.map((opt,i)=>{
+    const l=letters[i];
+    const sel=answered===l;
+    const showResult=answered!=null;
+    const correct=l===q.a;
+    let cls='opt-btn';
+    if(showResult){
+      if(correct) cls+=' correct';
+      else if(sel) cls+=' wrong';
+    } else if(sel) cls+=' selected';
+    return `<button class="${cls}" onclick="selectOpt('${l}')" ${showResult?'disabled':''}><span class="opt-badge">${l}</span>${opt.slice(3)}</button>`;
+  }).join('');
+
+  // explanation
+  const ea=document.getElementById('expArea');
+  if(answered!=null){
+    const correct=answered===q.a;
+    ea.style.display='';
+    ea.innerHTML=`<div class="explanation"><div class="exp-label">${correct?'✅ Benar!':'❌ Jawaban benar: '+q.a}</div>${q.e}</div>`;
+  } else {
+    ea.style.display='none';
+    ea.innerHTML='';
+  }
+
+  // nav buttons
+  document.getElementById('btnPrev').disabled=state.curQ===0;
+  const isLast=state.curQ===total-1;
+  const isLastSec=state.curSec===state.sections.length-1;
+  const nxtBtn=document.getElementById('btnNext');
+  if(isLast&&isLastSec) nxtBtn.textContent='Lihat Hasil →';
+  else if(isLast) nxtBtn.textContent='Bagian Berikutnya →';
+  else nxtBtn.textContent='Selanjutnya →';
+}
+
+function selectOpt(l){
+  const sid=state.sections[state.curSec];
+  const qs=QS[sid];
+  const q=qs[state.curQ];
+  if(state.answers[sid+'_'+q.n]!=null) return;
+  state.answers[sid+'_'+q.n]=l;
+  renderQ();
+}
+
+function prevQ(){if(state.curQ>0){state.curQ--;renderQ()}}
+function skipQ(){
+  const sid=state.sections[state.curSec];
+  const qs=QS[sid];
+  if(state.curQ<qs.length-1){state.curQ++;renderQ();}
+}
+
+function nextQ(){
+  const sid=state.sections[state.curSec];
+  const qs=QS[sid];
+  if(state.curQ<qs.length-1){state.curQ++;renderQ();}
+  else nextSection();
+}
+
+function nextSection(){
+  if(state.curSec<state.sections.length-1){
+    state.curSec++;
+    state.curQ=0;
+    beginSection();
+  } else {
+    clearInterval(state.timer);
+    showResults();
+  }
+}
+
+/* ─────────────── RESULTS ─────────────── */
+function showResults(){
+  hide('quiz');
+  show('results');
+
+  let total=0,correct=0;
+  const secResults=[];
+
+  state.sections.forEach(sid=>{
+    const qs=QS[sid]||[];
+    const sec=SECTIONS.find(s=>s.id===sid);
+    let sc=0,tc=qs.length;
+    qs.forEach(q=>{
+      total++;
+      if(state.answers[sid+'_'+q.n]===q.a){correct++;sc++;}
+    });
+    secResults.push({name:sec.name,sc,tc,pct:Math.round(sc/tc*100)});
+  });
+
+  const pct=Math.round(correct/total*100);
+  const badge=pct>=80?'🎉':pct>=60?'👍':pct>=40?'💪':'📚';
+  const title=pct>=80?'Luar Biasa!':pct>=60?'Bagus!':pct>=40?'Terus Semangat!':'Butuh Latihan Lebih!';
+  const desc=`Kamu menjawab ${correct} dari ${total} soal dengan benar (${pct}%)`;
+
+  document.getElementById('resBadge').textContent=badge;
+  document.getElementById('resTitle').textContent=title;
+  document.getElementById('resDesc').textContent=desc;
+  document.getElementById('resCorrect').textContent=correct;
+  document.getElementById('resPct').textContent=pct+'%';
+
+  // TOEFL ITP estimate (simplified)
+  const est=Math.min(677,Math.round(310+pct*3.7));
+  document.getElementById('toeflScore').textContent=est;
+
+  // section scores
+  const ss=document.getElementById('secScores');
+  ss.innerHTML=secResults.map(r=>`
+    <div class="ss-row">
+      <div class="ss-name">${r.name}</div>
+      <div class="ss-bar-wrap"><div class="ss-bar" style="width:${r.pct}%"></div></div>
+      <div class="ss-pct">${r.pct}%</div>
+    </div>`).join('');
+}
+
+/* ─────────────── REVIEW ─────────────── */
+function showReview(){
+  hide('results');show('review');
+  const content=document.getElementById('reviewContent');
+  let html='';
+  state.sections.forEach(sid=>{
+    const qs=QS[sid]||[];
+    const sec=SECTIONS.find(s=>s.id===sid);
+    html+=`<div style="font-weight:700;color:var(--g5);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin:1rem 0 .5rem">${sec.icon} ${sec.name}</div>`;
+    qs.forEach(q=>{
+      const given=state.answers[sid+'_'+q.n];
+      const correct=given===q.a;
+      const letter=q.o.find(o=>o.startsWith(q.a+'.'))||q.a;
+      html+=`<div class="review-q">
+        <div class="review-top">
+          <div class="rev-num${correct?'':' wrong'}">${q.n}</div>
+          <div>
+            <div class="rev-qtext">${q.q}</div>
+            <div class="rev-correct">Jawaban: ${letter.slice(3)||q.a}</div>
+            ${!correct&&given?`<div style="font-size:.8rem;color:#DC2626;margin-top:.2rem">Kamu memilih: ${given}</div>`:''}
+            ${!given?`<div style="font-size:.8rem;color:var(--muted);margin-top:.2rem">Tidak dijawab</div>`:''}
+          </div>
+        </div>
+        <div class="rev-exp">${q.e}</div>
+      </div>`;
+    });
+  });
+  content.innerHTML=html;
+}
+</script>
+</body>
+</html>
