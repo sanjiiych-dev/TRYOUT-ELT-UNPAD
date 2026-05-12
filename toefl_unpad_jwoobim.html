@@ -382,11 +382,12 @@ let state = {
 };
 
 /* ─────────────── NAV ─────────────── */
-function showCover(){hide('section-select');hide('quiz');hide('results');hide('review');show('cover')}
-function showSectionSelect(){hide('cover');hide('quiz');hide('results');hide('review');show('section-select');renderSections()}
-function backToResults(){hide('review');show('results')}
-function show(id){document.getElementById(id).style.display=''}
+const DISPLAY={cover:'flex','section-select':'block',quiz:'block',results:'block',review:'block'};
+function show(id){document.getElementById(id).style.display=DISPLAY[id]||'block'}
 function hide(id){document.getElementById(id).style.display='none'}
+function showCover(){['section-select','quiz','results','review'].forEach(hide);show('cover')}
+function showSectionSelect(){['cover','quiz','results','review'].forEach(hide);show('section-select');renderSections()}
+function backToResults(){hide('review');show('results')}
 
 /* ─────────────── SECTIONS ─────────────── */
 function renderSections(){
@@ -545,51 +546,39 @@ function nextSection(){
 
 /* ─────────────── RESULTS ─────────────── */
 function showResults(){
-  hide('quiz');
+  ['cover','section-select','quiz','review'].forEach(hide);
   show('results');
+  calcResults();
+}
+function showReview(){hide('results');show('review');renderReview();}
 
+
+function calcResults(){
   let total=0,correct=0;
   const secResults=[];
-
   state.sections.forEach(sid=>{
     const qs=QS[sid]||[];
     const sec=SECTIONS.find(s=>s.id===sid);
     let sc=0,tc=qs.length;
-    qs.forEach(q=>{
-      total++;
-      if(state.answers[sid+'_'+q.n]===q.a){correct++;sc++;}
-    });
-    secResults.push({name:sec.name,sc,tc,pct:Math.round(sc/tc*100)});
+    qs.forEach(q=>{total++;if(state.answers[sid+'_'+q.n]===q.a){correct++;sc++;}});
+    secResults.push({name:sec.name,icon:sec.icon,sc,tc,pct:tc?Math.round(sc/tc*100):0});
   });
-
-  const pct=Math.round(correct/total*100);
-  const badge=pct>=80?'🎉':pct>=60?'👍':pct>=40?'💪':'📚';
-  const title=pct>=80?'Luar Biasa!':pct>=60?'Bagus!':pct>=40?'Terus Semangat!':'Butuh Latihan Lebih!';
-  const desc=`Kamu menjawab ${correct} dari ${total} soal dengan benar (${pct}%)`;
-
-  document.getElementById('resBadge').textContent=badge;
-  document.getElementById('resTitle').textContent=title;
-  document.getElementById('resDesc').textContent=desc;
+  const pct=total?Math.round(correct/total*100):0;
+  document.getElementById('resBadge').textContent=pct>=80?'🎉':pct>=60?'👍':pct>=40?'💪':'📚';
+  document.getElementById('resTitle').textContent=pct>=80?'Luar Biasa!':pct>=60?'Bagus!':pct>=40?'Terus Semangat!':'Butuh Latihan Lebih!';
+  document.getElementById('resDesc').textContent=`Kamu menjawab ${correct} dari ${total} soal dengan benar (${pct}%)`;
   document.getElementById('resCorrect').textContent=correct;
   document.getElementById('resPct').textContent=pct+'%';
-
-  // TOEFL ITP estimate (simplified)
-  const est=Math.min(677,Math.round(310+pct*3.7));
-  document.getElementById('toeflScore').textContent=est;
-
-  // section scores
-  const ss=document.getElementById('secScores');
-  ss.innerHTML=secResults.map(r=>`
+  document.getElementById('toeflScore').textContent=Math.min(677,Math.round(310+pct*3.7));
+  document.getElementById('secScores').innerHTML=secResults.map(r=>`
     <div class="ss-row">
-      <div class="ss-name">${r.name}</div>
+      <div class="ss-name">${r.icon} ${r.name}</div>
       <div class="ss-bar-wrap"><div class="ss-bar" style="width:${r.pct}%"></div></div>
       <div class="ss-pct">${r.pct}%</div>
     </div>`).join('');
 }
 
-/* ─────────────── REVIEW ─────────────── */
-function showReview(){
-  hide('results');show('review');
+function renderReview(){
   const content=document.getElementById('reviewContent');
   let html='';
   state.sections.forEach(sid=>{
@@ -599,15 +588,16 @@ function showReview(){
     qs.forEach(q=>{
       const given=state.answers[sid+'_'+q.n];
       const correct=given===q.a;
-      const letter=q.o.find(o=>o.startsWith(q.a+'.'))||q.a;
+      const fullAns=q.o.find(o=>o.startsWith(q.a+'.'));
+      const ansText=fullAns?fullAns.slice(3):q.a;
       html+=`<div class="review-q">
         <div class="review-top">
           <div class="rev-num${correct?'':' wrong'}">${q.n}</div>
-          <div>
+          <div style="flex:1">
             <div class="rev-qtext">${q.q}</div>
-            <div class="rev-correct">Jawaban: ${letter.slice(3)||q.a}</div>
-            ${!correct&&given?`<div style="font-size:.8rem;color:#DC2626;margin-top:.2rem">Kamu memilih: ${given}</div>`:''}
-            ${!given?`<div style="font-size:.8rem;color:var(--muted);margin-top:.2rem">Tidak dijawab</div>`:''}
+            <div class="rev-correct">✅ Jawaban benar: ${q.a}. ${ansText}</div>
+            ${!correct&&given?`<div style="font-size:.8rem;color:#DC2626;margin-top:.2rem">❌ Kamu memilih: ${given}</div>`:''}
+            ${!given?`<div style="font-size:.8rem;color:var(--muted);margin-top:.2rem">— Tidak dijawab</div>`:''}
           </div>
         </div>
         <div class="rev-exp">${q.e}</div>
