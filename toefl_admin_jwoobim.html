@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel – TOEFL UNPAD JWOOBIM</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g1:#D8F3DC;--g2:#B7E4C7;--g3:#74C69D;--g4:#40916C;--g5:#2D6A4F;--g6:#1B4332;
+  --bg:#F5FCF7;--card:#fff;--border:#D8F3DC;--r:12px;--rs:8px;
+  --shadow:0 2px 16px rgba(27,67,50,0.1);
+  --red:#DC2626;--red-bg:#FEE2E2;--yellow-bg:#FFFDE7;--yellow:#F9A825;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--g6);min-height:100vh}
+
+/* LOGIN */
+#login{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem}
+.login-card{background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:2.5rem 2rem;width:100%;max-width:380px;text-align:center;box-shadow:var(--shadow)}
+.login-logo{font-size:3rem;margin-bottom:.5rem}
+.login-title{font-size:1.5rem;font-weight:800;color:var(--g6);margin-bottom:.3rem}
+.login-sub{font-size:.875rem;color:var(--g5);margin-bottom:1.75rem}
+.field{width:100%;padding:.875rem 1rem;border:2px solid var(--border);border-radius:var(--rs);font-size:.95rem;font-family:inherit;color:var(--g6);background:var(--bg);outline:none;margin-bottom:.875rem;transition:.2s}
+.field:focus{border-color:var(--g3)}
+.btn{width:100%;padding:.875rem;border:none;border-radius:var(--rs);background:var(--g4);color:#fff;font-size:.95rem;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s}
+.btn:hover{background:var(--g5)}
+.err{background:var(--red-bg);color:var(--red);font-size:.825rem;padding:.5rem .75rem;border-radius:var(--rs);margin-bottom:.875rem;display:none}
+
+/* ADMIN PANEL */
+#panel{display:none}
+.topbar{background:var(--g6);color:#fff;padding:.875rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100}
+.topbar-logo{font-size:1.1rem;font-weight:800;flex:1}
+.topbar-sub{font-size:.75rem;color:var(--g2)}
+.btn-sm{padding:.4rem .875rem;border-radius:6px;border:1.5px solid rgba(255,255,255,.3);background:transparent;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s}
+.btn-sm:hover{background:rgba(255,255,255,.1)}
+.btn-sm.danger{border-color:#FECACA;color:#FECACA}
+
+.container{max-width:1000px;margin:0 auto;padding:1.5rem 1rem}
+
+/* STATS ROW */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.875rem;margin-bottom:1.5rem}
+.stat-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:1.25rem;text-align:center}
+.stat-num{font-size:2rem;font-weight:800;color:var(--g4)}
+.stat-label{font-size:.8rem;color:var(--g5);margin-top:.25rem;font-weight:500}
+
+/* TABS */
+.tabs{display:flex;gap:.5rem;margin-bottom:1.25rem;border-bottom:2px solid var(--border);padding-bottom:.5rem}
+.tab{padding:.5rem 1rem;border-radius:var(--rs) var(--rs) 0 0;font-size:.875rem;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--g5);transition:.15s}
+.tab.active{background:var(--g4);color:#fff}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* CODE TABLE */
+.section-title{font-size:1rem;font-weight:800;color:var(--g6);margin-bottom:.875rem;display:flex;align-items:center;gap:.75rem}
+.badge{padding:.2rem .6rem;border-radius:20px;font-size:.7rem;font-weight:700}
+.badge-green{background:var(--g1);color:var(--g5)}
+.badge-red{background:var(--red-bg);color:var(--red)}
+.badge-yellow{background:var(--yellow-bg);color:var(--yellow)}
+
+.code-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.75rem;margin-bottom:1.5rem}
+.code-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem;transition:.15s}
+.code-card.used{border-color:var(--g3);background:#F0FAF3}
+.code-card.full{border-color:#FCA5A5;background:#FFF5F5}
+.code-top{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem}
+.code-str{font-size:1.1rem;font-weight:800;letter-spacing:.08em;color:var(--g6);flex:1;font-variant-numeric:tabular-nums}
+.code-copy{background:var(--g1);border:none;border-radius:6px;padding:.25rem .625rem;font-size:.75rem;font-weight:700;color:var(--g5);cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap}
+.code-copy:hover{background:var(--g2)}
+.code-copy.copied{background:var(--g3);color:#fff}
+.code-meta{font-size:.75rem;color:var(--g5);line-height:1.6}
+.code-devices{display:flex;flex-wrap:wrap;gap:.25rem;margin-top:.4rem}
+.dev-pill{background:var(--g1);color:var(--g6);font-size:.65rem;padding:.15rem .4rem;border-radius:4px;font-weight:600;border:1px solid var(--g2)}
+.dev-pill.full{background:#FECACA;border-color:#FCA5A5;color:var(--red)}
+
+/* GENERATE */
+.gen-box{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:1.25rem;margin-bottom:1.5rem}
+.gen-row{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;margin-bottom:.75rem}
+.gen-label{font-size:.875rem;font-weight:600;color:var(--g6)}
+.gen-count{padding:.5rem .875rem;border:1.5px solid var(--border);border-radius:var(--rs);font-size:.9rem;font-family:inherit;color:var(--g6);width:80px;outline:none}
+.gen-count:focus{border-color:var(--g3)}
+.btn-gen{padding:.6rem 1.25rem;background:var(--g4);color:#fff;border:none;border-radius:var(--rs);font-size:.875rem;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-gen:hover{background:var(--g5)}
+.gen-result{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--rs);padding:.875rem;font-family:monospace;font-size:.875rem;color:var(--g6);line-height:1.8;max-height:200px;overflow-y:auto;white-space:pre-wrap;margin-bottom:.75rem;display:none}
+.copy-all{padding:.5rem 1rem;background:var(--g3);color:#fff;border:none;border-radius:var(--rs);font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit}
+.tip-box{background:var(--yellow-bg);border:1.5px solid var(--yellow);border-radius:var(--rs);padding:.875rem 1rem;font-size:.825rem;color:#5D4037;line-height:1.7;margin-bottom:1.25rem}
+.tip-box strong{color:#4A3000}
+
+/* PRINT SHEET */
+.print-controls{display:flex;gap:.75rem;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap}
+.print-controls label{font-size:.875rem;font-weight:600;color:var(--g6)}
+.print-controls select{padding:.5rem .875rem;border:1.5px solid var(--border);border-radius:var(--rs);font-family:inherit;font-size:.875rem;color:var(--g6);background:var(--bg);outline:none}
+.btn-print{padding:.6rem 1.25rem;background:var(--g4);color:#fff;border:none;border-radius:var(--rs);font-size:.875rem;font-weight:700;cursor:pointer;font-family:inherit}
+.print-preview{display:grid;gap:.5rem;margin-bottom:1.5rem}
+.ticket{background:var(--card);border:1.5px dashed var(--g3);border-radius:var(--rs);padding:.875rem 1rem;display:flex;align-items:center;gap:.875rem}
+.ticket-icon{font-size:1.5rem}
+.ticket-info{flex:1}
+.ticket-code{font-size:1rem;font-weight:800;letter-spacing:.1em;color:var(--g6)}
+.ticket-name{font-size:.75rem;color:var(--g5);margin-top:.15rem}
+.ticket-jw{font-size:.7rem;color:var(--g3);font-weight:700;letter-spacing:.1em}
+
+/* RESET SECTION */
+.reset-box{background:#FFF5F5;border:1.5px solid #FECACA;border-radius:var(--r);padding:1.25rem}
+.reset-title{font-weight:800;color:var(--red);margin-bottom:.5rem;font-size:.95rem}
+.reset-desc{font-size:.825rem;color:#7F1D1D;line-height:1.7;margin-bottom:1rem}
+.btn-danger{padding:.6rem 1.25rem;background:var(--red);color:#fff;border:none;border-radius:var(--rs);font-size:.875rem;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-danger:hover{background:#B91C1C}
+
+@media print{
+  .topbar,.tabs,.stats,.gen-box,.tip-box,.print-controls,.reset-box,.no-print{display:none!important}
+  #panel{display:block!important}
+  .code-grid{grid-template-columns:repeat(3,1fr)}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-card">
+    <div class="login-logo">🔐</div>
+    <div class="login-title">Admin Panel</div>
+    <div class="login-sub">TOEFL UNPAD JWOOBIM — Manajemen Kode Akses</div>
+    <div class="err" id="loginErr">Password salah. Coba lagi.</div>
+    <input class="field" id="adminPass" type="password" placeholder="Masukkan password admin"
+      onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn" onclick="doLogin()">Masuk →</button>
+    <div style="font-size:.75rem;color:var(--g5);margin-top:1rem">
+      Halaman ini hanya untuk penyelenggara JWOOBIM
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="panel">
+  <div class="topbar">
+    <div>
+      <div class="topbar-logo">🌿 Admin Panel — TOEFL UNPAD JWOOBIM</div>
+      <div class="topbar-sub">Manajemen Kode Akses Tryout</div>
+    </div>
+    <button class="btn-sm" onclick="refreshAll()">↻ Refresh</button>
+    <button class="btn-sm" onclick="window.print()">🖨️ Print</button>
+    <button class="btn-sm danger" onclick="doLogout()">Keluar</button>
+  </div>
+
+  <div class="container">
+
+    <!-- STATS -->
+    <div class="stats" id="statsRow"></div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('codes')">📋 Semua Kode</button>
+      <button class="tab" onclick="switchTab('generate')">✨ Generate Kode Baru</button>
+      <button class="tab" onclick="switchTab('print')">🖨️ Cetak Tiket</button>
+      <button class="tab" onclick="switchTab('reset')">⚙️ Reset & Pengaturan</button>
+    </div>
+
+    <!-- TAB: CODES -->
+    <div class="tab-content active" id="tab-codes">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
+        <div class="section-title" style="margin:0">Daftar Kode Akses</div>
+        <div style="display:flex;gap:.5rem">
+          <button class="btn-gen" style="padding:.45rem .875rem;font-size:.8rem" onclick="filterCodes('all')">Semua</button>
+          <button class="btn-gen" style="padding:.45rem .875rem;font-size:.8rem;background:var(--g3)" onclick="filterCodes('unused')">Belum Dipakai</button>
+          <button class="btn-gen" style="padding:.45rem .875rem;font-size:.8rem;background:#FB923C" onclick="filterCodes('used')">Sudah Dipakai</button>
+        </div>
+      </div>
+      <div class="code-grid" id="codeGrid"></div>
+    </div>
+
+    <!-- TAB: GENERATE -->
+    <div class="tab-content" id="tab-generate">
+      <div class="tip-box">
+        <strong>Cara kerja sistem kode:</strong><br>
+        Kode baru yang kamu generate akan disimpan di <em>localStorage browser ini</em> sebagai "extra codes".
+        Peserta yang membuka file tryout di browser <strong>yang sama dengan browser ini</strong> bisa menggunakan kode baru tersebut.
+        Untuk distribusi antar komputer, copy kode baru dan tambahkan manual ke array <code>VALID_CODES</code> di file <code>toefl_unpad_jwoobim.html</code>.
+      </div>
+      <div class="gen-box">
+        <div class="gen-row">
+          <span class="gen-label">Jumlah kode yang akan dibuat:</span>
+          <input class="gen-count" id="genCount" type="number" value="10" min="1" max="100">
+          <button class="btn-gen" onclick="generateCodes()">✨ Generate</button>
+        </div>
+        <div class="gen-result" id="genResult"></div>
+        <button class="copy-all no-print" id="copyAllBtn" style="display:none" onclick="copyAllGenerated()">📋 Copy Semua Kode</button>
+      </div>
+
+      <div class="section-title">Instruksi Tambah Kode ke File Utama</div>
+      <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:var(--rs);padding:1rem;font-size:.875rem;line-height:1.8;color:var(--g6)">
+        <strong>Langkah:</strong><br>
+        1. Buka file <code>toefl_unpad_jwoobim.html</code> dengan text editor (Notepad, VSCode, dll.)<br>
+        2. Cari teks: <code>const VALID_CODES = [</code><br>
+        3. Tambahkan kode baru di dalam array tersebut, pisahkan dengan koma<br>
+        4. Simpan file → kode baru langsung aktif<br><br>
+        <strong>Contoh format kode yang valid:</strong> <code>JW-XXXX-XXX</code> (panjang 12 karakter dengan 2 tanda hubung)
+      </div>
+    </div>
+
+    <!-- TAB: PRINT -->
+    <div class="tab-content" id="tab-print">
+      <div class="print-controls no-print">
+        <label>Filter status:</label>
+        <select id="printFilter" onchange="renderPrintSheet()">
+          <option value="all">Semua kode</option>
+          <option value="unused">Belum dipakai saja</option>
+        </select>
+        <label>Nama event:</label>
+        <input id="eventName" type="text" placeholder="TOEFL UNPAD 2025" class="gen-count" style="width:200px">
+        <button class="btn-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+      </div>
+      <div id="printSheet"></div>
+    </div>
+
+    <!-- TAB: RESET -->
+    <div class="tab-content" id="tab-reset">
+      <div class="tip-box">
+        <strong>Perhatian:</strong> Operasi reset bersifat permanen dan tidak dapat dibatalkan. Gunakan hanya jika benar-benar diperlukan.
+      </div>
+
+      <div style="display:grid;gap:1rem;margin-bottom:1.5rem">
+
+        <div class="reset-box">
+          <div class="reset-title">🔄 Reset Satu Kode</div>
+          <div class="reset-desc">Hapus data perangkat yang terdaftar untuk satu kode tertentu. Kode tersebut bisa digunakan kembali di perangkat baru.</div>
+          <div style="display:flex;gap:.75rem;align-items:center;margin-bottom:.75rem;flex-wrap:wrap">
+            <input id="resetCodeInput" class="field" type="text" placeholder="Masukkan kode (JW-XXXX-XXX)" style="margin:0;flex:1;max-width:260px">
+            <button class="btn-danger" onclick="resetOneCode()">Reset Kode Ini</button>
+          </div>
+        </div>
+
+        <div class="reset-box">
+          <div class="reset-title">🗑️ Reset Semua Data</div>
+          <div class="reset-desc">Hapus SEMUA data penggunaan kode di browser ini. Semua kode akan kembali ke status "belum dipakai". Data peserta dari browser lain tidak terpengaruh.</div>
+          <button class="btn-danger" onclick="resetAllData()">Reset Semua Data</button>
+        </div>
+
+        <div class="reset-box">
+          <div class="reset-title">➕ Daftarkan Perangkat Manual</div>
+          <div class="reset-desc">Tambahkan Device ID tertentu ke kode tertentu. Berguna jika peserta ganti perangkat.</div>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem">
+            <input id="manualCode" class="field" type="text" placeholder="Kode (JW-XXXX-XXX)" style="margin:0;flex:1;min-width:160px">
+            <input id="manualDevice" class="field" type="text" placeholder="Device ID (DEV-XXXXX)" style="margin:0;flex:1;min-width:160px">
+          </div>
+          <button class="btn-gen" onclick="addDeviceManual()">Tambahkan Perangkat</button>
+        </div>
+      </div>
+
+      <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:1.25rem">
+        <div class="section-title">Info Sistem</div>
+        <div style="font-size:.825rem;color:var(--g5);line-height:1.8" id="sysInfo"></div>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+</div><!-- /panel -->
+
+<script>
+/* ──────────── CONFIG ──────────── */
+// Password admin (ubah sesuai kebutuhan)
+// Default: JWOOBIM2025
+const ADMIN_HASH = btoa('JWOOBIM2025');
+
+const STORE      = 'jwoobim_v2';        // harus sama dengan file tryout
+const EXTRA_KEY  = 'jwoobim_extra_codes';
+const MAX_DEVICES = 2;
+
+// Kode bawaan (harus sama dengan VALID_CODES di toefl_unpad_jwoobim.html)
+const BUILTIN_CODES = [
+  'JW-4V3Z-S9M','JW-8DRD-22E','JW-94AY-XSJ','JW-9DNL-4JG','JW-A764-KC6',
+  'JW-DPAH-RAG','JW-EHLV-HHD','JW-F2S2-SAL','JW-FRHN-CM9','JW-FZFN-9WT',
+  'JW-GDPP-QZX','JW-H86L-XN7','JW-HE8T-Q23','JW-HKDH-DKW','JW-MMHJ-8WV',
+  'JW-NH9R-DCE','JW-QJJT-JT7','JW-QPKJ-7P4','JW-QSJ6-PHS','JW-RG76-KWV',
+  'JW-SC94-974','JW-T4V4-TYC','JW-W2PC-N9S','JW-WAJH-ZX6','JW-WEPQ-86J',
+  'JW-WH74-DHX','JW-WSHV-3A3','JW-X42H-ALJ','JW-YLF8-LDD','JW-ZGL9-WPS'
+];
+
+const ALPHA = 'ACDEFGHJKLMNPQRSTVWXYZ2346789';
+let currentFilter = 'all';
+let lastGenerated = [];
+
+/* ──────────── AUTH ──────────── */
+function doLogin(){
+  const pass = document.getElementById('adminPass').value;
+  if(btoa(pass) === ADMIN_HASH){
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('panel').style.display = 'block';
+    refreshAll();
+  } else {
+    const e = document.getElementById('loginErr');
+    e.style.display = 'block';
+    setTimeout(()=> e.style.display='none', 3000);
+  }
+}
+document.addEventListener('keydown', e => { if(e.key==='Enter' && document.getElementById('login').style.display!=='none') doLogin(); });
+
+function doLogout(){
+  document.getElementById('panel').style.display = 'none';
+  document.getElementById('login').style.display = 'flex';
+  document.getElementById('adminPass').value = '';
+}
+
+/* ──────────── DATA ──────────── */
+function getDB(){ try{ return JSON.parse(localStorage.getItem(STORE)||'{}'); }catch(e){return {};} }
+function saveDB(d){ localStorage.setItem(STORE, JSON.stringify(d)); }
+function getExtraCodes(){ try{ return JSON.parse(localStorage.getItem(EXTRA_KEY)||'[]'); }catch(e){return [];} }
+function getAllCodes(){ return [...BUILTIN_CODES, ...getExtraCodes()]; }
+
+function codeStatus(code){
+  const db = getDB();
+  const entry = db[code];
+  if(!entry || !entry.devices || entry.devices.length === 0) return 'unused';
+  if(entry.devices.length >= MAX_DEVICES) return 'full';
+  return 'partial';
+}
+
+/* ──────────── TABS ──────────── */
+function switchTab(id){
+  document.querySelectorAll('.tab,.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelector(`[onclick="switchTab('${id}')"]`).classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+  if(id==='print') renderPrintSheet();
+  if(id==='reset') renderSysInfo();
+}
+
+/* ──────────── STATS ──────────── */
+function renderStats(){
+  const codes = getAllCodes();
+  const db = getDB();
+  let unused=0, partial=0, full=0, totalDevices=0;
+  codes.forEach(c => {
+    const s = codeStatus(c);
+    if(s==='unused') unused++;
+    else if(s==='partial') partial++;
+    else full++;
+    if(db[c] && db[c].devices) totalDevices += db[c].devices.length;
+  });
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${codes.length}</div><div class="stat-label">Total Kode</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--g4)">${unused}</div><div class="stat-label">Belum Dipakai</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:#F97316">${partial}</div><div class="stat-label">Dipakai (1 perangkat)</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--red)">${full}</div><div class="stat-label">Penuh (2 perangkat)</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--g5)">${totalDevices}</div><div class="stat-label">Total Perangkat Aktif</div></div>
+  `;
+}
+
+/* ──────────── CODE GRID ──────────── */
+function filterCodes(f){ currentFilter = f; renderCodeGrid(); }
+
+function renderCodeGrid(){
+  const codes = getAllCodes();
+  const db = getDB();
+  const extraCodes = getExtraCodes();
+  let filtered = codes;
+  if(currentFilter==='unused') filtered = codes.filter(c=>codeStatus(c)==='unused');
+  if(currentFilter==='used') filtered = codes.filter(c=>codeStatus(c)!=='unused');
+
+  document.getElementById('codeGrid').innerHTML = filtered.map((code,idx) => {
+    const entry = db[code] || {};
+    const devices = entry.devices || [];
+    const status = codeStatus(code);
+    const isExtra = extraCodes.includes(code);
+    const statusBadge = status==='unused'
+      ? `<span class="badge badge-green">Belum dipakai</span>`
+      : status==='full'
+        ? `<span class="badge badge-red">Penuh</span>`
+        : `<span class="badge badge-yellow">1 perangkat</span>`;
+    const devPills = devices.map(d =>
+      `<span class="dev-pill${status==='full'?' full':''}">${d}</span>`
+    ).join('');
+
+    return `<div class="code-card${status==='used'||status==='partial'?' used':''}${status==='full'?' full':''}">
+      <div class="code-top">
+        <div class="code-str">${code}</div>
+        ${isExtra?'<span class="badge badge-yellow">BARU</span>':''}
+        <button class="code-copy" id="cp-${idx}" onclick="copyCode('${code}',${idx})">📋 Copy</button>
+      </div>
+      <div class="code-meta">
+        ${statusBadge}
+        ${entry.name ? ` · <strong>${entry.name}</strong>` : ''}
+        ${entry.usedAt ? ` · ${new Date(entry.usedAt).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})}` : ''}
+      </div>
+      ${devPills ? `<div class="code-devices">${devPills}</div>` : ''}
+      <div style="margin-top:.5rem;display:flex;gap:.4rem">
+        <button onclick="quickReset('${code}')" style="font-size:.7rem;padding:.2rem .5rem;background:var(--red-bg);color:var(--red);border:1px solid #FECACA;border-radius:4px;cursor:pointer;font-family:inherit">Reset</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function copyCode(code, idx){
+  navigator.clipboard.writeText(code).then(()=>{
+    const btn = document.getElementById('cp-'+idx);
+    if(btn){ btn.textContent='✓ Copied'; btn.classList.add('copied'); setTimeout(()=>{ btn.textContent='📋 Copy'; btn.classList.remove('copied'); },1500); }
+  });
+}
+
+function quickReset(code){
+  if(!confirm(`Reset kode ${code}?\nData perangkat yang terdaftar akan dihapus.`)) return;
+  const db = getDB();
+  if(db[code]){ delete db[code]; saveDB(db); }
+  refreshAll();
+  alert('Kode berhasil direset!');
+}
+
+/* ──────────── GENERATE ──────────── */
+function randCode(){
+  const part1 = Array.from({length:4},()=>ALPHA[Math.floor(Math.random()*ALPHA.length)]).join('');
+  const part2 = Array.from({length:3},()=>ALPHA[Math.floor(Math.random()*ALPHA.length)]).join('');
+  return `JW-${part1}-${part2}`;
+}
+
+function generateCodes(){
+  const n = parseInt(document.getElementById('genCount').value)||10;
+  const existing = getAllCodes();
+  const newCodes = [];
+  let attempts = 0;
+  while(newCodes.length < n && attempts < 1000){
+    const c = randCode();
+    if(!existing.includes(c) && !newCodes.includes(c)) newCodes.push(c);
+    attempts++;
+  }
+  lastGenerated = newCodes;
+
+  // Save to extra codes
+  const extra = getExtraCodes();
+  const updated = [...extra, ...newCodes];
+  localStorage.setItem(EXTRA_KEY, JSON.stringify(updated));
+
+  const el = document.getElementById('genResult');
+  el.style.display = 'block';
+  el.textContent = newCodes.join('\n');
+
+  document.getElementById('copyAllBtn').style.display = 'inline-block';
+  refreshAll();
+  alert(`✅ ${newCodes.length} kode baru berhasil dibuat dan disimpan!`);
+}
+
+function copyAllGenerated(){
+  navigator.clipboard.writeText(lastGenerated.join('\n')).then(()=>{
+    const btn = document.getElementById('copyAllBtn');
+    btn.textContent = '✓ Tersalin!';
+    setTimeout(()=> btn.textContent='📋 Copy Semua Kode', 2000);
+  });
+}
+
+/* ──────────── PRINT SHEET ──────────── */
+function renderPrintSheet(){
+  const filter = document.getElementById('printFilter').value;
+  const event = document.getElementById('eventName').value || 'TOEFL UNPAD JWOOBIM';
+  let codes = getAllCodes();
+  if(filter==='unused') codes = codes.filter(c=>codeStatus(c)==='unused');
+
+  const db = getDB();
+  document.getElementById('printSheet').innerHTML = `
+    <div style="text-align:center;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:2px solid var(--border)">
+      <div style="font-size:1.3rem;font-weight:800;color:var(--g6)">🌿 ${event}</div>
+      <div style="font-size:.8rem;color:var(--g5);margin-top:.25rem">Daftar Kode Akses Peserta · JWOOBIM · ${new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'})}</div>
+    </div>
+    <div class="print-preview">
+      ${codes.map((code,i)=>{
+        const entry = db[code]||{};
+        return `<div class="ticket">
+          <div class="ticket-icon">🎟️</div>
+          <div class="ticket-info">
+            <div class="ticket-code">${code}</div>
+            <div class="ticket-name">Peserta ${i+1}${entry.name?' · '+entry.name:''}</div>
+          </div>
+          <div class="ticket-jw">JWOOBIM<br>MAX 2 DEVICE</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div style="font-size:.7rem;color:var(--g5);text-align:center;border-top:1px solid var(--border);padding-top:.75rem">
+      Potong per baris dan bagikan satu tiket per peserta. Jaga kerahasiaan kode ini.
+    </div>
+  `;
+}
+
+/* ──────────── RESET ──────────── */
+function resetOneCode(){
+  const code = document.getElementById('resetCodeInput').value.trim().toUpperCase();
+  if(!code){ alert('Masukkan kode terlebih dahulu.'); return; }
+  if(!getAllCodes().includes(code)){ alert('Kode tidak ditemukan.'); return; }
+  if(!confirm(`Reset kode ${code}? Semua perangkat yang terdaftar akan dihapus.`)) return;
+  const db = getDB();
+  if(db[code]){ delete db[code]; saveDB(db); }
+  refreshAll();
+  alert(`Kode ${code} berhasil direset.`);
+  document.getElementById('resetCodeInput').value = '';
+}
+
+function resetAllData(){
+  if(!confirm('HAPUS SEMUA data penggunaan kode? Tindakan ini tidak bisa dibatalkan.')) return;
+  if(!confirm('Konfirmasi sekali lagi: hapus semua data?')) return;
+  localStorage.removeItem(STORE);
+  localStorage.removeItem(EXTRA_KEY);
+  refreshAll();
+  alert('Semua data berhasil dihapus.');
+}
+
+function addDeviceManual(){
+  const code = document.getElementById('manualCode').value.trim().toUpperCase();
+  const devId = document.getElementById('manualDevice').value.trim().toUpperCase();
+  if(!code||!devId){ alert('Isi kode dan Device ID.'); return; }
+  if(!getAllCodes().includes(code)){ alert('Kode tidak ditemukan.'); return; }
+  const db = getDB();
+  if(!db[code]) db[code] = { devices:[], usedAt: new Date().toISOString() };
+  if(db[code].devices.includes(devId)){ alert('Device ID sudah terdaftar di kode ini.'); return; }
+  if(db[code].devices.length >= MAX_DEVICES){ alert(`Kode ini sudah penuh (${MAX_DEVICES} perangkat).`); return; }
+  db[code].devices.push(devId);
+  saveDB(db);
+  refreshAll();
+  alert(`Device ${devId} berhasil ditambahkan ke kode ${code}.`);
+  document.getElementById('manualCode').value = '';
+  document.getElementById('manualDevice').value = '';
+}
+
+function renderSysInfo(){
+  const codes = getAllCodes();
+  const extra = getExtraCodes();
+  const db = getDB();
+  const used = Object.keys(db).filter(c=>db[c].devices&&db[c].devices.length>0).length;
+  document.getElementById('sysInfo').innerHTML = `
+    Total kode builtin: <strong>${BUILTIN_CODES.length}</strong><br>
+    Total kode tambahan (localStorage): <strong>${extra.length}</strong><br>
+    Total seluruh kode: <strong>${codes.length}</strong><br>
+    Kode yang sudah dipakai: <strong>${used}</strong><br>
+    Storage key tryout: <code>${STORE}</code><br>
+    Storage key extra codes: <code>${EXTRA_KEY}</code><br>
+    Browser localStorage quota: ~5MB<br>
+    Password admin (hash): <code>${ADMIN_HASH}</code>
+  `;
+}
+
+/* ──────────── MAIN ──────────── */
+function refreshAll(){
+  renderStats();
+  renderCodeGrid();
+}
+</script>
+</body>
+</html>
