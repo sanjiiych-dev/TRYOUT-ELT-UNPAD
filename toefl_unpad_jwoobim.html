@@ -19,7 +19,7 @@
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 
 /* ── COVER ── */
-#cover{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;position:relative;overflow:hidden}
+#cover{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;position:relative;overflow:hidden}
 #cover::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,#D8F3DC88 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,#B7E4C744 0%,transparent 50%);pointer-events:none}
 .cover-stickers{font-size:2rem;letter-spacing:6px;margin-bottom:1.5rem;opacity:.8}
 .cover-brand{font-family:'Fraunces',serif;font-size:clamp(2.4rem,6vw,3.8rem);font-weight:700;color:var(--g6);line-height:1.1;text-align:center;margin-bottom:.4rem}
@@ -31,7 +31,36 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .btn-primary{background:var(--g4);color:#fff;border:none;border-radius:var(--rs);padding:.9rem 2.5rem;font-size:1.05rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;width:100%;max-width:320px}
 .btn-primary:hover{background:var(--g5);transform:translateY(-1px)}
 
-/* ── SECTION SELECT ── */
+/* ── CODE ENTRY ── */
+#code-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;background:var(--bg)}
+.code-card{background:var(--card);border:1.5px solid var(--border);border-radius:calc(var(--r)*1.5);padding:2.5rem 2rem;width:100%;max-width:420px;box-shadow:0 8px 40px rgba(27,67,50,0.12);text-align:center}
+.code-logo{font-size:2.5rem;margin-bottom:.5rem}
+.code-title{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:700;color:var(--g6);margin-bottom:.3rem}
+.code-sub{font-size:.875rem;color:var(--muted);margin-bottom:1.75rem;line-height:1.6}
+.code-input-wrap{position:relative;margin-bottom:.875rem}
+.code-input{width:100%;padding:.875rem 1rem;border:2px solid var(--border);border-radius:var(--rs);font-size:1rem;font-family:inherit;font-weight:600;text-align:center;letter-spacing:.1em;text-transform:uppercase;color:var(--g6);background:var(--bg);outline:none;transition:.2s}
+.code-input:focus{border-color:var(--g3)}
+.name-input{width:100%;padding:.875rem 1rem;border:2px solid var(--border);border-radius:var(--rs);font-size:.95rem;font-family:inherit;color:var(--g6);background:var(--bg);outline:none;transition:.2s;margin-bottom:.875rem}
+.name-input:focus{border-color:var(--g3)}
+.code-error{color:#DC2626;font-size:.825rem;padding:.5rem .75rem;background:#FEE2E2;border-radius:var(--rs);margin-bottom:.875rem;display:none}
+.code-info{font-size:.75rem;color:var(--muted);margin-top:1rem;line-height:1.6;border-top:1px solid var(--border);padding-top:.875rem}
+.device-tag{display:inline-block;background:var(--g1);color:var(--g5);font-size:.7rem;font-weight:700;padding:.2rem .5rem;border-radius:4px;letter-spacing:.05em;margin-top:.3rem}
+
+/* ── EXIT MODAL ── */
+#exit-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;padding:1rem}
+.modal-card{background:var(--card);border-radius:var(--r);padding:2rem;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.2)}
+.modal-icon{font-size:2.5rem;margin-bottom:.75rem}
+.modal-title{font-weight:800;font-size:1.1rem;color:var(--g6);margin-bottom:.5rem}
+.modal-desc{font-size:.875rem;color:var(--muted);line-height:1.6;margin-bottom:1.5rem}
+.modal-btns{display:flex;gap:.75rem}
+.modal-btns button{flex:1;padding:.75rem;border-radius:var(--rs);font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;border:none}
+.modal-cancel{background:var(--g1);color:var(--g5)}
+.modal-exit{background:#DC2626;color:#fff}
+
+/* ── QUIZ header exit button ── */
+.btn-exit-quiz{background:transparent;border:1.5px solid #FECACA;color:#DC2626;border-radius:var(--rs);padding:.3rem .75rem;font-size:.75rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:.15s}
+.btn-exit-quiz:hover{background:#FEE2E2}
+
 #section-select{display:none;padding:2rem 1rem;max-width:700px;margin:0 auto}
 .sec-title{font-family:'Fraunces',serif;font-size:1.6rem;color:var(--g6);margin-bottom:.3rem;font-weight:700}
 .sec-desc{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
@@ -129,6 +158,37 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 <body>
 <div class="watermark">JWOOBIM</div>
 
+<!-- CODE ENTRY SCREEN -->
+<div id="code-screen">
+  <div class="code-card">
+    <div class="code-logo">🌿</div>
+    <div class="code-title">TOEFL UNPAD</div>
+    <div class="code-sub">Masukkan kode akses yang kamu terima dari penyelenggara untuk mulai tryout.<br>Kode hanya bisa digunakan di maksimal <strong>2 perangkat</strong>.</div>
+    <input class="name-input" id="nameInput" type="text" placeholder="Nama lengkap kamu" autocomplete="off" />
+    <input class="code-input" id="codeInput" type="text" placeholder="JW-XXXX-XXX" maxlength="12" autocomplete="off"
+      oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')validateCode()" />
+    <div class="code-error" id="codeError"></div>
+    <button class="btn-primary" style="max-width:100%" onclick="validateCode()">Masuk ke Tryout →</button>
+    <div class="code-info">
+      Butuh kode? Hubungi penyelenggara JWOOBIM.<br>
+      ID Perangkat kamu: <span class="device-tag" id="deviceIdDisplay">—</span>
+    </div>
+  </div>
+</div>
+
+<!-- EXIT CONFIRMATION MODAL -->
+<div id="exit-modal">
+  <div class="modal-card">
+    <div class="modal-icon">⚠️</div>
+    <div class="modal-title">Keluar dari Ujian?</div>
+    <div class="modal-desc">Progres jawaban kamu akan tersimpan. Kamu bisa lanjut mengerjakan kapanpun dengan kode yang sama.</div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeExitModal()">Lanjut Ujian</button>
+      <button class="modal-exit" onclick="confirmExit()">Ya, Keluar</button>
+    </div>
+  </div>
+</div>
+
 <!-- COVER -->
 <div id="cover">
   <div class="cover-stickers">🌿🐸🦋🌻🐝🐢🌳🍃</div>
@@ -163,6 +223,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     <div class="q-section-name" id="qSecName">Listening</div>
     <div class="q-progress-text" id="qProgText">1 / 50</div>
     <div class="timer" id="timer">--:--</div>
+    <button class="btn-exit-quiz" onclick="openExitModal()">✕ Keluar</button>
   </div>
   <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
   <div id="scriptArea"></div>
@@ -211,7 +272,13 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 </div>
 
 <script>
-const SECTIONS = [
+/* ─────────────── INIT ─────────────── */
+// On page load: hide cover, show code screen
+document.addEventListener('DOMContentLoaded', function(){
+  hide('cover');
+  initCodeScreen();
+});
+
   { id:'listen_a', name:'Listening Part A', icon:'🎧', detail:'Short Conversations — No. 1–20', count:20, time:20*60 },
   { id:'listen_b', name:'Listening Part B', icon:'💬', detail:'Long Conversations — No. 21–35', count:15, time:15*60 },
   { id:'listen_c', name:'Listening Part C', icon:'🎓', detail:'Academic Lectures — No. 36–50', count:15, time:15*60 },
@@ -382,12 +449,117 @@ let state = {
 };
 
 /* ─────────────── NAV ─────────────── */
-const DISPLAY={cover:'flex','section-select':'block',quiz:'block',results:'block',review:'block'};
+/* ─────────────── ACCESS CODE SYSTEM ─────────────── */
+const VALID_CODES = [
+  'JW-4V3Z-S9M','JW-8DRD-22E','JW-94AY-XSJ','JW-9DNL-4JG','JW-A764-KC6',
+  'JW-DPAH-RAG','JW-EHLV-HHD','JW-F2S2-SAL','JW-FRHN-CM9','JW-FZFN-9WT',
+  'JW-GDPP-QZX','JW-H86L-XN7','JW-HE8T-Q23','JW-HKDH-DKW','JW-MMHJ-8WV',
+  'JW-NH9R-DCE','JW-QJJT-JT7','JW-QPKJ-7P4','JW-QSJ6-PHS','JW-RG76-KWV',
+  'JW-SC94-974','JW-T4V4-TYC','JW-W2PC-N9S','JW-WAJH-ZX6','JW-WEPQ-86J',
+  'JW-WH74-DHX','JW-WSHV-3A3','JW-X42H-ALJ','JW-YLF8-LDD','JW-ZGL9-WPS'
+];
+const STORE = 'jwoobim_v2';
+const MAX_DEVICES = 2;
+
+// Generate/retrieve unique device ID for this browser
+function getDeviceId(){
+  let id = localStorage.getItem('jwoobim_device');
+  if(!id){
+    id = 'DEV-' + Math.random().toString(36).substr(2,5).toUpperCase() +
+         Math.random().toString(36).substr(2,4).toUpperCase();
+    localStorage.setItem('jwoobim_device', id);
+  }
+  return id;
+}
+
+function getStore(){ try{ return JSON.parse(localStorage.getItem(STORE)||'{}'); }catch(e){return {};} }
+function saveStore(d){ localStorage.setItem(STORE, JSON.stringify(d)); }
+
+// Called when page loads
+function initCodeScreen(){
+  const devId = getDeviceId();
+  document.getElementById('deviceIdDisplay').textContent = devId;
+
+  // Check if already authenticated
+  const db = getStore();
+  const activeCode = Object.keys(db).find(c => db[c].devices && db[c].devices.includes(devId));
+  if(activeCode){
+    // Auto-login
+    currentCode = activeCode;
+    currentName = db[activeCode].name || 'Peserta';
+    show('cover'); hide('code-screen');
+  }
+}
+
+let currentCode = '';
+let currentName = '';
+
+function validateCode(){
+  const raw = document.getElementById('codeInput').value.trim().toUpperCase();
+  const name = document.getElementById('nameInput').value.trim();
+  const errEl = document.getElementById('codeError');
+
+  if(!name){ showErr(errEl,'Masukkan nama lengkap kamu terlebih dahulu.'); return; }
+  if(!raw){ showErr(errEl,'Masukkan kode akses.'); return; }
+
+  // Normalize: add dashes if user typed without them
+  let code = raw;
+  if(!code.includes('-') && code.length === 10){
+    code = code.slice(0,2)+'-'+code.slice(2,6)+'-'+code.slice(6);
+  }
+
+  if(!VALID_CODES.includes(code)){
+    showErr(errEl,'❌ Kode tidak valid. Periksa kembali atau hubungi penyelenggara.'); return;
+  }
+
+  const devId = getDeviceId();
+  const db = getStore();
+
+  if(!db[code]){ db[code] = { devices:[], name, usedAt: new Date().toISOString() }; }
+
+  const entry = db[code];
+  if(!entry.devices.includes(devId)){
+    if(entry.devices.length >= MAX_DEVICES){
+      showErr(errEl,`❌ Kode ini sudah digunakan di ${MAX_DEVICES} perangkat lain. Hubungi JWOOBIM jika ini milikmu.`); return;
+    }
+    entry.devices.push(devId);
+    entry.name = name;
+    saveStore(db);
+  }
+
+  errEl.style.display='none';
+  currentCode = code;
+  currentName = name;
+  hide('code-screen');
+  show('cover');
+}
+
+function showErr(el, msg){ el.textContent=msg; el.style.display='block'; }
+
+/* ─────────────── EXIT MODAL ─────────────── */
+function openExitModal(){
+  document.getElementById('exit-modal').style.display='flex';
+}
+function closeExitModal(){
+  document.getElementById('exit-modal').style.display='none';
+}
+function confirmExit(){
+  closeExitModal();
+  clearInterval(state.timer);
+  showSectionSelect();
+}
+
+/* ─────────────── NAV ─────────────── */
+const DISPLAY={
+  'code-screen':'flex',cover:'flex',
+  'section-select':'block',quiz:'block',results:'block',review:'block'
+};
 function show(id){document.getElementById(id).style.display=DISPLAY[id]||'block'}
 function hide(id){document.getElementById(id).style.display='none'}
-function showCover(){['section-select','quiz','results','review'].forEach(hide);show('cover')}
+function showCover(){['section-select','quiz','results','review','code-screen'].forEach(hide);show('cover')}
 function showSectionSelect(){['cover','quiz','results','review'].forEach(hide);show('section-select');renderSections()}
 function backToResults(){hide('review');show('results')}
+
 
 /* ─────────────── SECTIONS ─────────────── */
 function renderSections(){
@@ -463,14 +635,74 @@ function renderQ(){
   document.getElementById('qNum').textContent=q.n;
   document.getElementById('qText').textContent=q.q;
 
-  // script/passage
+  // ── Script / Passage area ──────────────────────────────────────────
   const sa=document.getElementById('scriptArea');
-  if(q.s&&!q.s.startsWith('[')){
-    sa.innerHTML=`<div class="script-box"><div class="script-label">📻 Script Percakapan</div>${q.s.split('\n').map(l=>`<div>${l||'&nbsp;'}</div>`).join('')}</div>`;
-  } else if(q.p&&!q.p.startsWith('[')){
-    sa.innerHTML=`<div class="passage-box">${q.p.split('\n\n').map(p=>`<p>${p}</p>`).join('')}</div>`;
-  } else {
-    sa.innerHTML='';
+  sa.innerHTML='';
+
+  // Build lookup: for each question, find its "base" script or passage
+  // by walking backward through the section until we find a non-reference entry
+  function resolveContent(qItem, secId, qIdx){
+    const qs = QS[secId];
+
+    // --- PASSAGE (Reading) ---
+    if(qItem.p !== undefined){
+      let p = qItem.p;
+      if(!p.startsWith('[')){
+        return {text:p, type:'passage'};
+      }
+      // lanjutan: look back
+      for(let i=qIdx-1;i>=0;i--){
+        const prev=qs[i];
+        if(prev.p !== undefined && !prev.p.startsWith('[')){
+          return {text:prev.p, type:'passage'};
+        }
+      }
+      return null;
+    }
+
+    // --- SCRIPT (Listening) ---
+    let s = qItem.s || '';
+    if(!s) return null;
+
+    if(!s.startsWith('[')){
+      // Plain script — show as-is
+      return {text:s, type:'script'};
+    }
+
+    // Starts with '['
+    const nl = s.indexOf('\n');
+    if(nl > -1){
+      // Has content after header line — strip the label line
+      return {text:s.slice(nl+1).trim(), type:'script'};
+    }
+
+    // Pure reference like "[Percakapan 1 – lanjutan]" — look back
+    for(let i=qIdx-1;i>=0;i--){
+      const prev=qs[i];
+      const ps=prev.s||'';
+      if(!ps.startsWith('[')){
+        return {text:ps, type:'script'};
+      }
+      if(ps.startsWith('[') && ps.indexOf('\n')>-1){
+        return {text:ps.slice(ps.indexOf('\n')+1).trim(), type:'script'};
+      }
+    }
+    return null;
+  }
+
+  const content = resolveContent(q, sid, state.curQ);
+  if(content){
+    if(content.type==='passage'){
+      sa.innerHTML=`<div class="passage-box">
+        <div class="script-label" style="font-style:normal;margin-bottom:.75rem">📄 Teks Bacaan — Baca teks ini sebelum menjawab</div>
+        ${content.text.split('\n\n').filter(p=>p.trim()).map(p=>`<p>${p.trim()}</p>`).join('')}
+      </div>`;
+    } else {
+      sa.innerHTML=`<div class="script-box">
+        <div class="script-label">🎧 Script Percakapan / Lecture — Baca sebagai simulasi audio</div>
+        ${content.text.split('\n').map(l=>`<div style="margin-bottom:.15rem">${l||'&nbsp;'}</div>`).join('')}
+      </div>`;
+    }
   }
 
   // options
