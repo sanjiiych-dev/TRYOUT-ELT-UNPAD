@@ -19,7 +19,7 @@
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 
 /* ── COVER ── */
-#cover{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;position:relative;overflow:hidden}
+#cover{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;position:relative;overflow:hidden}
 #cover::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,#D8F3DC88 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,#B7E4C744 0%,transparent 50%);pointer-events:none}
 .cover-stickers{font-size:2rem;letter-spacing:6px;margin-bottom:1.5rem;opacity:.8}
 .cover-brand{font-family:'Fraunces',serif;font-size:clamp(2.4rem,6vw,3.8rem);font-weight:700;color:var(--g6);line-height:1.1;text-align:center;margin-bottom:.4rem}
@@ -30,6 +30,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .wm{font-size:.75rem;color:var(--g3);letter-spacing:.15em;font-weight:600;margin-top:.5rem}
 .btn-primary{background:var(--g4);color:#fff;border:none;border-radius:var(--rs);padding:.9rem 2.5rem;font-size:1.05rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;width:100%;max-width:320px}
 .btn-primary:hover{background:var(--g5);transform:translateY(-1px)}
+
+/* ── VISIBILITY SYSTEM ── */
+.hidden{display:none!important}
 
 /* ── CODE ENTRY ── */
 #code-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;background:var(--bg)}
@@ -61,7 +64,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .btn-exit-quiz{background:transparent;border:1.5px solid #FECACA;color:#DC2626;border-radius:var(--rs);padding:.3rem .75rem;font-size:.75rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:.15s}
 .btn-exit-quiz:hover{background:#FEE2E2}
 
-#section-select{display:none;padding:2rem 1rem;max-width:700px;margin:0 auto}
+#section-select{padding:2rem 1rem;max-width:700px;margin:0 auto}
 .sec-title{font-family:'Fraunces',serif;font-size:1.6rem;color:var(--g6);margin-bottom:.3rem;font-weight:700}
 .sec-desc{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
 .sections-grid{display:grid;gap:.75rem}
@@ -77,7 +80,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .btn-start-all{margin-top:1.25rem;width:100%}
 
 /* ── QUIZ ── */
-#quiz{display:none;max-width:700px;margin:0 auto;padding:1rem}
+#quiz{max-width:700px;margin:0 auto;padding:1rem}
 .quiz-header{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:.875rem 1.25rem;margin-bottom:.875rem;display:flex;align-items:center;gap:1rem}
 .q-section-name{font-weight:700;color:var(--g5);font-size:.875rem;flex:1}
 .q-progress-text{font-size:.8rem;color:var(--muted)}
@@ -120,7 +123,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .q-counter{text-align:center;padding:.5rem;font-size:.8rem;color:var(--muted)}
 
 /* ── RESULTS ── */
-#results{display:none;max-width:700px;margin:0 auto;padding:2rem 1rem}
+#results{max-width:700px;margin:0 auto;padding:2rem 1rem}
 .result-header{text-align:center;margin-bottom:2rem}
 .result-badge{font-size:3.5rem;margin-bottom:.5rem}
 .result-title{font-family:'Fraunces',serif;font-size:2rem;font-weight:700;color:var(--g6)}
@@ -142,7 +145,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .back-btn{width:100%;background:transparent;border:1.5px solid var(--border)}
 
 /* review */
-#review{display:none;max-width:700px;margin:0 auto;padding:1rem}
+#review{max-width:700px;margin:0 auto;padding:1rem}
 .review-q{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:.75rem}
 .review-top{display:flex;gap:.5rem;align-items:flex-start;margin-bottom:.75rem}
 .rev-num{min-width:28px;height:28px;background:var(--g4);color:#fff;border-radius:50%;font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -190,7 +193,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 </div>
 
 <!-- COVER -->
-<div id="cover">
+<div id="cover" class="hidden">
   <div class="cover-stickers">🌿🐸🦋🌻🐝🐢🌳🍃</div>
   <div class="cover-brand">TOEFL UNPAD</div>
   <div class="cover-sub">Tryout & Latihan Lengkap · JWOOBIM</div>
@@ -205,7 +208,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 </div>
 
 <!-- SECTION SELECT -->
-<div id="section-select">
+<div id="section-select" class="hidden">
   <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem">
     <button onclick="showCover()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--g4)">←</button>
     <div>
@@ -218,7 +221,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 </div>
 
 <!-- QUIZ -->
-<div id="quiz">
+<div id="quiz" class="hidden">
   <div class="quiz-header">
     <div class="q-section-name" id="qSecName">Listening</div>
     <div class="q-progress-text" id="qProgText">1 / 50</div>
@@ -243,7 +246,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 </div>
 
 <!-- RESULTS -->
-<div id="results">
+<div id="results" class="hidden">
   <div class="result-header">
     <div class="result-badge" id="resBadge">🎉</div>
     <div class="result-title" id="resTitle">Selamat!</div>
@@ -263,7 +266,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 </div>
 
 <!-- REVIEW -->
-<div id="review">
+<div id="review" class="hidden">
   <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem">
     <button onclick="backToResults()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--g4)">←</button>
     <div class="sec-title">Review Jawaban</div>
@@ -273,12 +276,13 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 
 <script>
 /* ─────────────── INIT ─────────────── */
-// On page load: hide cover, show code screen
 document.addEventListener('DOMContentLoaded', function(){
-  hide('cover');
+  // code-screen is shown by default (no hidden class)
+  // all other screens start with class="hidden"
   initCodeScreen();
 });
 
+const SECTIONS = [
   { id:'listen_a', name:'Listening Part A', icon:'🎧', detail:'Short Conversations — No. 1–20', count:20, time:20*60 },
   { id:'listen_b', name:'Listening Part B', icon:'💬', detail:'Long Conversations — No. 21–35', count:15, time:15*60 },
   { id:'listen_c', name:'Listening Part C', icon:'🎓', detail:'Academic Lectures — No. 36–50', count:15, time:15*60 },
@@ -484,10 +488,9 @@ function initCodeScreen(){
   const db = getStore();
   const activeCode = Object.keys(db).find(c => db[c].devices && db[c].devices.includes(devId));
   if(activeCode){
-    // Auto-login
     currentCode = activeCode;
     currentName = db[activeCode].name || 'Peserta';
-    show('cover'); hide('code-screen');
+    showOnly('cover');
   }
 }
 
@@ -530,8 +533,7 @@ function validateCode(){
   errEl.style.display='none';
   currentCode = code;
   currentName = name;
-  hide('code-screen');
-  show('cover');
+  showOnly('cover');
 }
 
 function showErr(el, msg){ el.textContent=msg; el.style.display='block'; }
@@ -550,15 +552,31 @@ function confirmExit(){
 }
 
 /* ─────────────── NAV ─────────────── */
-const DISPLAY={
-  'code-screen':'flex',cover:'flex',
-  'section-select':'block',quiz:'block',results:'block',review:'block'
-};
-function show(id){document.getElementById(id).style.display=DISPLAY[id]||'block'}
-function hide(id){document.getElementById(id).style.display='none'}
-function showCover(){['section-select','quiz','results','review','code-screen'].forEach(hide);show('cover')}
-function showSectionSelect(){['cover','quiz','results','review'].forEach(hide);show('section-select');renderSections()}
-function backToResults(){hide('review');show('results')}
+// FLEX screens (need display:flex, not block)
+const FLEX_SCREENS = new Set(['cover','code-screen','exit-modal']);
+
+function show(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.classList.remove('hidden');
+  // flex screens need explicit display:flex since removing 'hidden' alone
+  // won't set the display type if the CSS doesn't specify one
+  if(FLEX_SCREENS.has(id)) el.style.display = 'flex';
+  else el.style.display = '';
+}
+function hide(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.classList.add('hidden');
+  el.style.display = '';
+}
+function showOnly(id){
+  ['code-screen','cover','section-select','quiz','results','review'].forEach(hide);
+  show(id);
+}
+function showCover(){ showOnly('cover'); }
+function showSectionSelect(){ showOnly('section-select'); renderSections(); }
+function backToResults(){ hide('review'); show('results'); }
 
 
 /* ─────────────── SECTIONS ─────────────── */
@@ -602,8 +620,7 @@ function beginSection(){
   clearInterval(state.timer);
   state.timeLeft=sec.time;
   startTimer();
-  hide('section-select');
-  show('quiz');
+  showOnly('quiz');
   renderQ();
 }
 
@@ -778,11 +795,10 @@ function nextSection(){
 
 /* ─────────────── RESULTS ─────────────── */
 function showResults(){
-  ['cover','section-select','quiz','review'].forEach(hide);
-  show('results');
+  showOnly('results');
   calcResults();
 }
-function showReview(){hide('results');show('review');renderReview();}
+function showReview(){showOnly('review');renderReview();}
 
 
 function calcResults(){
